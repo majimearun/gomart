@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderId implements Serializable {
-    private Long orderTransactionId;
+public class CartId implements Serializable {
+    private GomartUser customer;
 
     private Product product;
 

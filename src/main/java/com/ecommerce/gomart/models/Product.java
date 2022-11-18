@@ -63,13 +63,6 @@ public class Product {
     )
     private Category category;
 
-    @ManyToOne(
-            cascade = CascadeType.ALL
-    )
-    @JoinColumn(
-            name = "cart_id",
-            referencedColumnName = "user_id"
-    )
-    private Cart cart;
+
 
 }

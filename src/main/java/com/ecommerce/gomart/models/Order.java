@@ -10,17 +10,15 @@ import java.time.LocalDate;
 public class Order {
     @Id
     @Column(
-            name = "tracking_id",
+            name = "transaction_id",
             nullable = false
     )
-    private Long orderTrackingId;
+    private Long orderTransactionId;
 
     @Id
-    @Column(
-            name = "product_id",
-            nullable = false
-    )
-    private Long productId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @Column(
             name = "date_of_order",
