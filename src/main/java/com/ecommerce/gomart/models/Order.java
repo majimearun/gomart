@@ -5,7 +5,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "gomart_orders")
+@Table(
+        name = "gomart_orders"
+)
 @IdClass(OrderId.class)
 public class Order {
     @Id
@@ -16,8 +18,13 @@ public class Order {
     private Long orderTransactionId;
 
     @Id
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", nullable = false)
+    @ManyToOne(
+            cascade = CascadeType.REMOVE
+    )
+    @JoinColumn(
+            name = "product_id",
+            nullable = false
+    )
     private Product product;
 
     @Column(
@@ -33,7 +40,7 @@ public class Order {
     private Integer quantity;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.REMOVE
     )
     @JoinColumn(
             name = "user_id"

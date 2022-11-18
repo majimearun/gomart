@@ -63,6 +63,9 @@ public class Product {
     )
     private Category category;
 
-
+    @Column(
+            name = "offer"
+    )
+    private Double offer;
 
 }

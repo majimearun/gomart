@@ -20,6 +20,7 @@ public class ProductConfig {
                     .description("Fresh Apple")
                     .quantity(10)
                     .category(Category.Food)
+                    .offer(12.6)
                     .build();
 
             productRepository.save(p1);

@@ -16,7 +16,7 @@ import java.util.List;
 @IdClass(CartId.class)
 public class Cart {
     @Id
-    @OneToOne(
+    @ManyToOne(
             cascade = CascadeType.ALL
     )
     @JoinColumn(
@@ -26,7 +26,9 @@ public class Cart {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(
+            name = "product_id"
+    )
     private Product product;
 
     @Column(
