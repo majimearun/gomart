@@ -43,6 +43,29 @@ public class GomartUserConfig {
 
             gomartUserRepository.save(u1);
 
+            Wallet wallet2 = new Wallet().builder()
+                    .amount(1000)
+                    .build(); 
+
+            Customer c2 = new Customer(
+                    wallet2
+            );
+
+            Manager m2 = new Manager(true);
+            Admin a2 = new Admin(true);
+            GomartUser u2 = new GomartUser().builder()
+                    .firstName("D")
+                    .middleName("E")
+                    .lastName("F")
+                    .dob(LocalDate.of(1998, Month.JUNE, 24))
+                    .email("def@gmail.com")
+                    .role(Role.Admin)
+                    .customer(c2)
+                    .manager(m2)
+                    .admin(a2)
+                    .build();
+            gomartUserRepository.save(u2);
+
         };
     }
 }

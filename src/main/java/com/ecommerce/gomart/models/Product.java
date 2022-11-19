@@ -44,7 +44,7 @@ public class Product {
             name = "product_price",
             nullable = false
     )
-    private Integer price;
+    private double price;
 
     @Column(
             name = "product_quantity",

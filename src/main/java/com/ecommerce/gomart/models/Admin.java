@@ -19,7 +19,7 @@ import javax.persistence.Embeddable;
                 column = @Column(name = "admin_perms")
         )
 )
-public class Admin {
+public class Admin{
     @Column(
             name = "admin_perms",
             nullable = false,

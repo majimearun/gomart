@@ -13,18 +13,27 @@ import java.util.List;
 @Table(
         name = "gomart_cart_items"
 )
-@IdClass(CartId.class)
+
 public class Cart {
     @Id
-    @ManyToOne(
-            cascade = CascadeType.ALL
+    @SequenceGenerator(
+            name="cart_sequence",
+            sequenceName = "cart_sequence",
+            allocationSize = 1
     )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_sequence")
+    @Column(
+            name = "entry_id"
+    )
+    private Long entryId;
+
+    @ManyToOne
     @JoinColumn(
             name = "user_id"
     )
     private GomartUser customer;
 
-    @Id
+
     @ManyToOne
     @JoinColumn(
             name = "product_id"
@@ -36,7 +45,5 @@ public class Cart {
             nullable = false
     )
     private Integer quantity;
-
-
 
 }

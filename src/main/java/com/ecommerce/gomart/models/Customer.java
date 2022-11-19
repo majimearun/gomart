@@ -9,7 +9,7 @@ import javax.persistence.Embedded;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Customer extends GomartUser{
+public class Customer{
     @Embedded
     private Wallet wallet;
 

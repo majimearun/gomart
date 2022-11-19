@@ -25,6 +25,39 @@ public class ProductConfig {
 
             productRepository.save(p1);
 
+            Product p2 = new Product().builder()
+                    .name("Mango")
+                    .price(199)
+                    .description("Fresh Mango")
+                    .quantity(10)
+                    .category(Category.Food)
+                    .offer(12.6)
+                    .build();
+
+            productRepository.save(p2);
+
+            Product p3 = new Product().builder()
+                    .name("Banana")
+                    .price(199)
+                    .description("Fresh Banana")
+                    .quantity(10)
+                    .category(Category.Food)
+                    .offer(12.6)
+                    .build();
+
+            productRepository.save(p3);
+
+            Product p4 = new Product().builder()
+                    .name("Orange")
+                    .price(199)
+                    .description("Fresh Orange")
+                    .quantity(10)
+                    .category(Category.Food)
+                    .offer(12.6)
+                    .build();   
+
+            productRepository.save(p4);
+
         };
 
 

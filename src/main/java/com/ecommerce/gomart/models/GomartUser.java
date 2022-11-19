@@ -76,9 +76,4 @@ public class GomartUser {
     @Embedded
     private Admin admin;
 
-    public int getAge(){
-        return Period.between(LocalDate.now(), dob).getYears();
-    }
-
-
 }

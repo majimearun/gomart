@@ -1,6 +1,12 @@
 package com.ecommerce.gomart.models;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -8,30 +14,31 @@ import java.time.LocalDate;
 @Table(
         name = "gomart_orders"
 )
-@IdClass(OrderId.class)
+@Data
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Builder
 public class Order {
     @Id
+    @SequenceGenerator(
+            name="order_sequence",
+            sequenceName = "order_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_sequence")
     @Column(
             name = "transaction_id",
             nullable = false
     )
     private Long orderTransactionId;
 
-    @Id
-    @ManyToOne(
-            cascade = CascadeType.REMOVE
-    )
+    @ManyToOne
     @JoinColumn(
             name = "product_id",
             nullable = false
     )
     private Product product;
 
-    @Column(
-            name = "date_of_order",
-            nullable = false
-    )
-    private LocalDate date;
 
     @Column(
             name = "quantity",
@@ -39,9 +46,12 @@ public class Order {
     )
     private Integer quantity;
 
-    @ManyToOne(
-            cascade = CascadeType.REMOVE
+    @Column(
+            name = "order_date"
     )
+    private LocalDate orderDate;
+
+    @ManyToOne
     @JoinColumn(
             name = "user_id"
     )
