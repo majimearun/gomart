@@ -54,10 +54,12 @@ public class Product {
     )
     private Integer quantity;
 
+
     @Column(
             name = "product_image"
     )
-    private String image;
+    @Lob
+    private byte[] image;
 
     @Column(
             name = "product_category",

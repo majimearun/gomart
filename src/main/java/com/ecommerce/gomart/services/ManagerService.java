@@ -4,8 +4,12 @@ import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ManagerService {
@@ -31,4 +35,11 @@ public class ManagerService {
     public void deleteProduct(Long id){
         productRepository.deleteById(id);
     }
+
+    public void saveImage(Long productId, MultipartFile file) throws IOException {
+        Product product = productRepository.findById(productId).get();
+        product.setImage(file.getBytes());
+        productRepository.save(product);
+    }
+
 }
