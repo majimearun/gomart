@@ -6,12 +6,10 @@ import com.ecommerce.gomart.repositories.CartRepository;
 import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,16 +91,35 @@ public class CustomerService {
     public void checkOutFromCart(Long userId){
         GomartUser user = gomartUserRepository.findById(userId).get();
         List<Cart> cartList = cartRepository.findByCustomer(user);
+        double total = 0;
         for(Cart cart: cartList){
-            Order order = new Order().builder()
-                    .customer(cart.getCustomer())
-                    .product(cart.getProduct())
-                    .quantity(cart.getQuantity())
-                    .orderDate(LocalDate.now())
-                    .build();
-            orderRepository.save(order);
+            total += (100 - cart.getProduct().getOffer()) * cart.getProduct().getPrice() * cart.getQuantity();
         }
-        cartRepository.deleteAll(cartList);
+        if(total > user.getCustomer().getWallet().getAmount()){
+            throw new RuntimeException("Insufficient Balance");
+        }
+        else{
+            for(Cart cart: cartList){
+                Order order = new Order().builder()
+                        .customer(cart.getCustomer())
+                        .product(cart.getProduct())
+                        .quantity(cart.getQuantity())
+                        .orderDate(LocalDate.now())
+                        .build();
+                orderRepository.save(order);
+            }
+            cartRepository.deleteAll(cartList);
+            user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() - total);
+            gomartUserRepository.save(user);
+        }
+        
+        
+    }
+
+    public void topUpWallet(Long userId, double amount){
+        GomartUser user = gomartUserRepository.findById(userId).get();
+        user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() + amount);
+        gomartUserRepository.save(user);
     }
 
     public void changeQuantityOfProductInCart(Long userId, Long productId, Integer quantity){

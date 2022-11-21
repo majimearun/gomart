@@ -2,7 +2,6 @@ package com.ecommerce.gomart.repositories;
 
 import com.ecommerce.gomart.models.Customer;
 import com.ecommerce.gomart.models.GomartUser;
-import com.ecommerce.gomart.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

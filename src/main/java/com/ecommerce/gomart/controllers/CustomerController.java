@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/api/v1/")
+@RequestMapping(path = "/api/v1/user")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -46,36 +46,40 @@ public class CustomerController {
         return customerService.getProductsInCategoryByPriceRange(getProduct.getCategory(), getProduct.getMin(), getProduct.getMax());
     }
 
-    @GetMapping(path = "user/{userId}")
+    @GetMapping(path = "/{userId}")
     public @ResponseBody GomartUser getUserInfo(@PathVariable Long userId){
         return customerService.getUserInfo(userId);
     }
 
-    @PutMapping(path = "user/{userId}")
+    @PutMapping(path = "/{userId}")
     public void updateUserInfo(@PathVariable Long userId, @RequestBody GomartUser user){
         customerService.updateUserInfo(user);
     }
 
-    @PostMapping(path = "user/addToCart")
+    @PostMapping(path = "/addToCart")
     public void addToCart(@RequestBody GetCart getCart){
         customerService.addToCart(getCart.getProductId(), getCart.getUserId(), getCart.getQuantity());
     }
 
-    @GetMapping(path = "user/{userId}/cart")
+    @GetMapping(path = "/{userId}/cart")
     public @ResponseBody List<Cart> getCart(@PathVariable Long userId){
         return customerService.getCart(userId);
     }
 
-    @PatchMapping(path = "user/cart")
+    @PatchMapping(path = "/cart")
     public void updateCart(@RequestBody GetCart getCart){
         customerService.changeQuantityOfProductInCart(getCart.getProductId(), getCart.getUserId(), getCart.getQuantity());
     }
 
-    @PostMapping(path = "user/cart/checkout")
+    @PostMapping(path = "/cart/checkout")
     public void checkout(@RequestBody GetCart getCart){
         customerService.checkOutFromCart(getCart.getUserId());
     }
 
+    @PostMapping("wallet")
+    public void addMoneyToWallet(@RequestBody GetWallet getWallet){
+        customerService.topUpWallet(getWallet.getUserId(), getWallet.getAmount());
+    }
 
 
 }

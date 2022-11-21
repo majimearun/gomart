@@ -20,5 +20,5 @@ import javax.persistence.Embeddable;
 
 )
 public class Wallet {
-    private Integer amount;
+    private double amount;
 }

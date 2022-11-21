@@ -11,7 +11,6 @@ import com.ecommerce.gomart.models.Admin;
 import com.ecommerce.gomart.models.Customer;
 import com.ecommerce.gomart.models.GomartUser;
 import com.ecommerce.gomart.models.Manager;
-import com.ecommerce.gomart.models.Role;
 import com.ecommerce.gomart.models.Wallet;
 import com.ecommerce.gomart.repositories.GomartUserRepository;
 
@@ -35,7 +34,6 @@ public class GomartUserConfig {
                     .lastName("C")
                     .dob(LocalDate.of(1998, Month.JUNE, 24))
                     .email("abc@gmail.com")
-                    .role(Role.Admin)
                     .customer(c1)
                     .manager(m1)
                     .admin(a1)
@@ -59,7 +57,6 @@ public class GomartUserConfig {
                     .lastName("F")
                     .dob(LocalDate.of(1998, Month.JUNE, 24))
                     .email("def@gmail.com")
-                    .role(Role.Admin)
                     .customer(c2)
                     .manager(m2)
                     .admin(a2)

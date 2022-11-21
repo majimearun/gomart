@@ -65,7 +65,6 @@ public class GomartUser {
             name = "role",
             nullable = false
     )
-    private Role role;
 
     @Embedded
     private Customer customer;
