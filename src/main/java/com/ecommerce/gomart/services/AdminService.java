@@ -55,4 +55,21 @@ public class AdminService {
         GomartUser user = gomartUserRepository.findById(userId).get();
         return orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
     }
+
+    public List<GomartUser> getCustomers(){
+        return gomartUserRepository.findAll();
+    }
+
+    public List<Product> getProducts(){
+        return productRepository.findAll();
+    }
+
+    public List<GomartUser> getManagers(){
+        return gomartUserRepository.findByManagerIsNotNull();
+    }
+
+    public List<Product> getProductsByName(String name) {
+        return productRepository.findByFuzzyName(name);
+    }
+
 }

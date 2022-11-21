@@ -60,7 +60,7 @@ public class CustomerController {
 
     @PostMapping(path = "/addToCart")
     public void addToCart(@RequestBody GetCart getCart){
-        customerService.addToCart(getCart.getProductId(), getCart.getUserId(), getCart.getQuantity());
+        customerService.addToCart(getCart.getUserId(), getCart.getProductId(), getCart.getQuantity());
     }
 
     @GetMapping(path = "/{userId}/cart")
@@ -70,7 +70,7 @@ public class CustomerController {
 
     @PatchMapping(path = "/cart")
     public void updateCart(@RequestBody GetCart getCart){
-        customerService.changeQuantityOfProductInCart(getCart.getProductId(), getCart.getUserId(), getCart.getQuantity());
+        customerService.changeQuantityOfProductInCart(getCart.getUserId(), getCart.getProductId(), getCart.getQuantity());
     }
 
     @PostMapping(path = "/cart/checkout")

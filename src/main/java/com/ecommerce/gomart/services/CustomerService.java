@@ -42,7 +42,7 @@ public class CustomerService {
     }
 
     public List<Product> getProductsByName(String name) {
-        return productRepository.findByName(name);
+        return productRepository.findByFuzzyName(name);
     }
 
     public List<Product> getProductsInCategoryByPriceRange(int category, double min, double max) {
@@ -83,7 +83,10 @@ public class CustomerService {
 
     public List<Cart> getCart(Long userId){
         GomartUser user = gomartUserRepository.findById(userId).get();
-        return cartRepository.findByCustomer(user);
+        System.out.println(user);
+        List<Cart> carts =  cartRepository.findByCustomer(user);
+        System.out.println(carts);
+        return carts;
     
     }
 
@@ -92,7 +95,7 @@ public class CustomerService {
         List<Cart> cartList = cartRepository.findByCustomer(user);
         double total = 0;
         for(Cart cart: cartList){
-            total += (100 - cart.getProduct().getOffer()) * cart.getProduct().getPrice() * cart.getQuantity();
+            total += (100 - cart.getProduct().getOffer())/100 * cart.getProduct().getPrice() * cart.getQuantity();
         }
         if(total > user.getCustomer().getWallet().getAmount()){
             throw new RuntimeException("Insufficient Balance");
@@ -106,8 +109,8 @@ public class CustomerService {
                         .orderDate(LocalDate.now())
                         .build();
                 orderRepository.save(order);
+                cartRepository.deleteById(cart.getEntryId());
             }
-            cartRepository.deleteAll(cartList);
             user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() - total);
             gomartUserRepository.save(user);
         }

@@ -1,11 +1,16 @@
 package com.ecommerce.gomart.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.gomart.models.GomartUser;
+import com.ecommerce.gomart.models.Order;
 import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.services.AdminService;
 
@@ -46,7 +51,27 @@ public class AdminController {
     }
 
     @PostMapping(path = "/report")
-    public void generateReport(@RequestBody GetOrder getOrder){
-        adminService.getOrdersOfCustomerInDateRange(getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
+    public List<Order> generateReport(@RequestBody GetOrder getOrder){
+        return adminService.getOrdersOfCustomerInDateRange(getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
+    }
+
+    @GetMapping(path = "/customers")
+    public List<GomartUser> getCustomers(){
+        return adminService.getCustomers();
+    }
+
+    @GetMapping(path = "/products")
+    public List<Product> getProducts(){
+        return adminService.getProducts();
+    }
+
+    @GetMapping(path = "/managers")
+    public List<GomartUser> getManagers(){
+        return adminService.getManagers();
+    }
+
+    @GetMapping(path = "/products/{name}")
+    public List<Product> getProductByName(@RequestBody String name){
+        return adminService.getProductsByName(name);
     }
 }

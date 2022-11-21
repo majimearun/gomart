@@ -32,6 +32,7 @@ CommandLineRunner commandLineRunner2(GomartUserRepository gomartUserRepository){
                 .customer(c1)
                 .manager(m1)
                 .admin(a1)
+                .role(Role.CUSTOMER)
                 .build();
 
         gomartUserRepository.save(u1);
@@ -55,6 +56,7 @@ CommandLineRunner commandLineRunner2(GomartUserRepository gomartUserRepository){
                 .customer(c2)
                 .manager(m2)
                 .admin(a2)
+                .role(Role.MANAGER)
                 .build();
         gomartUserRepository.save(u2);
 
@@ -66,7 +68,7 @@ CommandLineRunner commandLineRunner2(GomartUserRepository gomartUserRepository){
                         wallet3
         );
 
-        Manager m3 = new Manager(false);
+        Manager m3 = new Manager(true);
         Admin a3 = new Admin(true);
 
         GomartUser u3 = new GomartUser().builder()
@@ -78,6 +80,7 @@ CommandLineRunner commandLineRunner2(GomartUserRepository gomartUserRepository){
                 .customer(c3)
                 .manager(m3)
                 .admin(a3)
+                .role(Role.ADMIN)
                 .build();
 
         gomartUserRepository.save(u3);

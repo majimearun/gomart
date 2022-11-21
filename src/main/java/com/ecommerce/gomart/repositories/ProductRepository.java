@@ -3,6 +3,7 @@ package com.ecommerce.gomart.repositories;
 import com.ecommerce.gomart.models.Category;
 import com.ecommerce.gomart.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,7 +13,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByCategory(Category category);
 
-    List<Product> findByName(String name);
+    @Query(value = "SELECT *, LEVENSHTEIN(product_name, :name) FROM gomart_products ORDER BY LEVENSHTEIN(product_name, :name) ASC LIMIT 10", nativeQuery = true)
+    List<Product> findByFuzzyName(String name);
 
     List<Product> findByCategoryAndPriceBetween(Category category, double min, double max);
     
