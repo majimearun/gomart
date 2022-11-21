@@ -1,12 +1,13 @@
 package com.ecommerce.gomart.models;
 
 
-import lombok.*;
-import net.bytebuddy.asm.Advice;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.Period;
 
 @AllArgsConstructor
 @RequiredArgsConstructor

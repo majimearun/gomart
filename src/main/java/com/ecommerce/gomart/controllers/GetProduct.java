@@ -1,7 +1,5 @@
 package com.ecommerce.gomart.controllers;
 
-import com.ecommerce.gomart.models.Category;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

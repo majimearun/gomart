@@ -1,6 +1,9 @@
 package com.ecommerce.gomart.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;

@@ -1,6 +1,8 @@
 package com.ecommerce.gomart.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;

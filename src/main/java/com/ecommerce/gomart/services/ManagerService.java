@@ -1,10 +1,11 @@
 package com.ecommerce.gomart.services;
 
+import com.ecommerce.gomart.models.Product;
+import com.ecommerce.gomart.repositories.GomartUserRepository;
+import com.ecommerce.gomart.repositories.OrderRepository;
+import com.ecommerce.gomart.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.ecommerce.gomart.models.Product;
-import com.ecommerce.gomart.repositories.*;
 
 @Service
 public class ManagerService {

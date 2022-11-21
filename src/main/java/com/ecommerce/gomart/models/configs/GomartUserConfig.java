@@ -1,18 +1,13 @@
 package com.ecommerce.gomart.models.configs;
 
-import java.time.LocalDate;
-import java.time.Month;
-
+import com.ecommerce.gomart.models.*;
+import com.ecommerce.gomart.repositories.GomartUserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.ecommerce.gomart.models.Admin;
-import com.ecommerce.gomart.models.Customer;
-import com.ecommerce.gomart.models.GomartUser;
-import com.ecommerce.gomart.models.Manager;
-import com.ecommerce.gomart.models.Wallet;
-import com.ecommerce.gomart.repositories.GomartUserRepository;
+import java.time.LocalDate;
+import java.time.Month;
 
 @Configuration
 public class GomartUserConfig {
