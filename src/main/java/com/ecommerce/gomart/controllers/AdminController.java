@@ -25,6 +25,11 @@ public class AdminController {
         adminService.giveManagerAccess(userId);
     }
 
+    @PostMapping(path = "/removeManager")
+    public void removeManager(@RequestBody Long userId){
+        adminService.removeManagerAccess(userId);
+    }
+
     @PostMapping(path = "/addProduct")
     public void addProduct(@RequestBody Product product){
         adminService.addProduct(product);
@@ -38,5 +43,10 @@ public class AdminController {
     @PostMapping(path = "/deleteProduct")
     public void deleteProduct(@RequestBody Long id){
         adminService.deleteProduct(id);
+    }
+
+    @PostMapping(path = "/report")
+    public void generateReport(@RequestBody GetOrder getOrder){
+        adminService.getOrdersOfCustomerInDateRange(getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
     }
 }

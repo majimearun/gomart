@@ -2,11 +2,13 @@ package com.ecommerce.gomart.controllers;
 
 import com.ecommerce.gomart.models.Cart;
 import com.ecommerce.gomart.models.GomartUser;
+import com.ecommerce.gomart.models.Order;
 import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -79,6 +81,21 @@ public class CustomerController {
     @PostMapping("wallet")
     public void addMoneyToWallet(@RequestBody GetWallet getWallet){
         customerService.topUpWallet(getWallet.getUserId(), getWallet.getAmount());
+    }
+
+    @GetMapping(path = "/{userId}/orders")
+    public @ResponseBody List<Order> getOrders(@PathVariable Long userId){
+        return customerService.getOrders(userId);
+    }
+
+    @GetMapping(path = "/orders")
+    public @ResponseBody List<Order> getOrdersByDate(@RequestBody GetOrder getOrder){
+        return customerService.getOrdersByOrderDate(getOrder.getUserId(), getOrder.getStartDate());
+    }
+
+    @GetMapping(path = "/orders/dateRange")
+    public @ResponseBody List<Order> getOrdersByDateRange(@RequestBody GetOrder getOrder){
+        return customerService.getOrdersByOrderDateRange(getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
     }
 
 

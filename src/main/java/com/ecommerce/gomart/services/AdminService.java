@@ -2,10 +2,15 @@ package com.ecommerce.gomart.services;
 
 import com.ecommerce.gomart.models.GomartUser;
 import com.ecommerce.gomart.models.Manager;
+import com.ecommerce.gomart.models.Order;
 import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +43,16 @@ public class AdminService {
         GomartUser user = gomartUserRepository.findById(userId).get();
         user.setManager(new Manager(true));
         gomartUserRepository.save(user);
+    }
+
+    public void removeManagerAccess(Long userId){
+        GomartUser user = gomartUserRepository.findById(userId).get();
+        user.setManager(new Manager(false));
+        gomartUserRepository.save(user);
+    }
+
+    public List<Order> getOrdersOfCustomerInDateRange(Long userId, LocalDate startDate, LocalDate endDate){
+        GomartUser user = gomartUserRepository.findById(userId).get();
+        return orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
     }
 }

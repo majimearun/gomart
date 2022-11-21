@@ -128,4 +128,19 @@ public class CustomerService {
         cart.setQuantity(quantity);
         cartRepository.save(cart);
     }
+
+    public List<Order> getOrders(Long userId){
+        GomartUser user = gomartUserRepository.findById(userId).get();
+        return orderRepository.findByCustomer(user);
+    }
+
+    public List<Order> getOrdersByOrderDate(Long userId, LocalDate date){
+        GomartUser user = gomartUserRepository.findById(userId).get();
+        return orderRepository.findByCustomerAndOrderDate(user, date);
+    }
+
+    public List<Order> getOrdersByOrderDateRange(Long userId, LocalDate startDate, LocalDate endDate){
+        GomartUser user = gomartUserRepository.findById(userId).get();
+        return orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
+    }
 }
