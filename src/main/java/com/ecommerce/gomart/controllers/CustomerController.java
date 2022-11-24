@@ -98,6 +98,21 @@ public class CustomerController {
         return customerService.getOrdersByOrderDateRange(getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
     }
 
+    @PostMapping(path = "/login")
+    public void login(@RequestBody Login login){
+        customerService.login(login.getUserId(), login.getPassword());
+    }
+
+    @PostMapping(path = "/logout")
+    public void logout(@RequestBody Login login){
+        customerService.logout(login.getUserId());
+    }
+
+    @PostMapping(path = "/signup")
+    public void register(@RequestBody Signup signup){
+        customerService.signUp(signup.getPassword(), signup.getFirstName(), signup.getLastName(), signup.getDob(), signup.getEmail(), signup.getAmount());
+    }
+
 
 }
 

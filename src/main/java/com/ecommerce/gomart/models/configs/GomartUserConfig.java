@@ -24,6 +24,8 @@ CommandLineRunner commandLineRunner2(GomartUserRepository gomartUserRepository){
         Manager m1 = new Manager(false);
         Admin a1 = new Admin(false);
         GomartUser u1 = new GomartUser().builder()
+                .password("password")
+                .loginStatus(false)
                 .firstName("A")
                 .middleName("B")
                 .lastName("C")
@@ -48,6 +50,8 @@ CommandLineRunner commandLineRunner2(GomartUserRepository gomartUserRepository){
         Manager m2 = new Manager(true);
         Admin a2 = new Admin(false);
         GomartUser u2 = new GomartUser().builder()
+                .password("password")
+                .loginStatus(false)
                 .firstName("D")
                 .middleName("E")
                 .lastName("F")
@@ -72,6 +76,8 @@ CommandLineRunner commandLineRunner2(GomartUserRepository gomartUserRepository){
         Admin a3 = new Admin(true);
 
         GomartUser u3 = new GomartUser().builder()
+                .password("password")
+                .loginStatus(false)
                 .firstName("G")
                 .middleName("H")
                 .lastName("I")

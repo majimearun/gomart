@@ -6,6 +6,7 @@ import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,6 +27,51 @@ public class CustomerService {
         this.cartRepository = cartRepository;
         this.gomartUserRepository = gomartUserRepository;
         this.productRepository = productRepository;
+    }
+
+    public void signUp(String password, String firstName, String lastName, LocalDate dob, String email, double amount){
+        Wallet wallet = new Wallet().builder()
+                .amount(amount)
+                .build();
+        Customer customer = new Customer(
+                wallet
+        );
+        GomartUser gomartUser = new GomartUser().builder()
+                .password(password)
+                .loginStatus(false)
+                .firstName(firstName)
+                .lastName(lastName)
+                .dob(dob)
+                .email(email)
+                .customer(customer)
+                .admin(new Admin(false))
+                .manager(new Manager(false))
+                .role(Role.CUSTOMER)
+                .build();
+        gomartUserRepository.save(gomartUser);
+    }
+
+    public void login(Long userId, String password){
+        Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
+        if(gomartUser.isPresent()){
+            if(gomartUser.get().getPassword().equals(password)){
+                gomartUser.get().setLoginStatus(true);
+                gomartUserRepository.save(gomartUser.get());
+                ResponseEntity.ok().body("Logged In");
+            }
+            else{
+                ResponseEntity.status(null).body("Incorrect Password");
+            }
+        }
+    }
+
+    public void logout(Long userId){
+        Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
+        if(gomartUser.isPresent()){
+            gomartUser.get().setLoginStatus(false);
+            gomartUserRepository.save(gomartUser.get());
+            ResponseEntity.ok().body("Logged Out");
+        }
     }
 
     public Product getProductById(Long id) {
@@ -50,8 +96,52 @@ public class CustomerService {
     }
 
     public GomartUser getUserInfo(Long userId){
-        Optional<GomartUser> user = gomartUserRepository.findById(userId);
-        return user.get();
+        if(checkIfUserLoggedIn(userId)){
+            Optional<GomartUser> user = gomartUserRepository.findById(userId);
+            return user.get();
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+            return null;
+        }
+        
+    }
+
+    public List<Cart> getCart(Long userId){
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            System.out.println(user);
+            List<Cart> carts =  cartRepository.findByCustomer(user);
+            System.out.println(carts);
+            return carts;
+    
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+            return null;
+        }
+        
+    }
+
+    public List<Order> getOrders(Long userId){
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            return orderRepository.findByCustomer(user);
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+            return null;
+        }
+    }
+
+    public List<Order> getOrdersByOrderDate(Long userId, LocalDate date){
+        GomartUser user = gomartUserRepository.findById(userId).get();
+        return orderRepository.findByCustomerAndOrderDate(user, date);
+    }
+
+    public List<Order> getOrdersByOrderDateRange(Long userId, LocalDate startDate, LocalDate endDate){
+        GomartUser user = gomartUserRepository.findById(userId).get();
+        return orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
     }
 
     public void updateUserInfo(GomartUser user){
@@ -64,7 +154,7 @@ public class CustomerService {
     }
 
     
-     public void addToCart(Long userId, Long productId, Integer quantity){
+    public void addToCart(Long userId, Long productId, Integer quantity){
          GomartUser user = gomartUserRepository.findById(userId).get();
          Product product = productRepository.findById(productId).get();
          Cart cart = new Cart().builder()
@@ -73,21 +163,12 @@ public class CustomerService {
                  .quantity(quantity).
                  build();
          cartRepository.save(cart);
-     }
+    }
 
     public void removeFromCart(Long userId, Long productId){
         GomartUser user = gomartUserRepository.findById(userId).get();
         Product product = productRepository.findById(productId).get();
         cartRepository.deleteById(cartRepository.findByCustomerAndProduct(user, product).getEntryId());
-    }
-
-    public List<Cart> getCart(Long userId){
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        System.out.println(user);
-        List<Cart> carts =  cartRepository.findByCustomer(user);
-        System.out.println(carts);
-        return carts;
-    
     }
 
     public void checkOutFromCart(Long userId){
@@ -110,6 +191,10 @@ public class CustomerService {
                         .build();
                 orderRepository.save(order);
                 cartRepository.deleteById(cart.getEntryId());
+                // decrease quantity of product
+                Product product = cart.getProduct();
+                product.setQuantity(product.getQuantity() - cart.getQuantity());
+                productRepository.save(product);
             }
             user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() - total);
             gomartUserRepository.save(user);
@@ -125,6 +210,7 @@ public class CustomerService {
     }
 
     public void changeQuantityOfProductInCart(Long userId, Long productId, Integer quantity){
+
         GomartUser user = gomartUserRepository.findById(userId).get();
         Product product = productRepository.findById(productId).get();
         Cart cart = cartRepository.findByCustomerAndProduct(user, product);
@@ -132,18 +218,10 @@ public class CustomerService {
         cartRepository.save(cart);
     }
 
-    public List<Order> getOrders(Long userId){
+    private boolean checkIfUserLoggedIn(Long userId){
         GomartUser user = gomartUserRepository.findById(userId).get();
-        return orderRepository.findByCustomer(user);
+        return user.isLoginStatus();
     }
 
-    public List<Order> getOrdersByOrderDate(Long userId, LocalDate date){
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        return orderRepository.findByCustomerAndOrderDate(user, date);
-    }
 
-    public List<Order> getOrdersByOrderDateRange(Long userId, LocalDate startDate, LocalDate endDate){
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        return orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
-    }
 }

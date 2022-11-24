@@ -32,6 +32,17 @@ public class GomartUser {
         )
         private Long userId;
 
+        @Column(
+                name = "password",
+                nullable = false
+        )
+        private String password;
+
+        @Column(
+                name = "login_status",
+                nullable = false
+        )
+        private boolean loginStatus;
 
         @Column(
                 name = "first_name",
