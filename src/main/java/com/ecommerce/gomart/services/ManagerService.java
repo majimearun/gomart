@@ -26,22 +26,42 @@ public class ManagerService {
         this.productRepository = productRepository;
     }
 
-    public void addProduct(Product product){
-        productRepository.save(product);
+    public void addProduct(Long userId, Product product){
+        if(checkManagerStatus(userId)){
+            productRepository.save(product);
+        }
+        else{
+            throw new RuntimeException("User is not a manager");
+        }
     }
 
-    public void updateProduct(Product product){
-        productRepository.save(product);
+    public void updateProduct(Long userId, Product product){
+        if(checkManagerStatus(userId)){
+            productRepository.save(product);
+        }
+        else{
+            throw new RuntimeException("User is not a manager");
+        }
     }
 
-    public void deleteProduct(Long id){
-        productRepository.deleteById(id);
+    public void deleteProduct(Long userId, Long id){
+        if(checkManagerStatus(userId)){
+            productRepository.deleteById(id);
+        }
+        else{
+            throw new RuntimeException("User is not a manager");
+        }
     }
 
-    public void saveImage(Long productId, MultipartFile file) throws IOException {
-        Product product = productRepository.findById(productId).get();
-        product.setImage(file.getBytes());
-        productRepository.save(product);
+    public void saveImage(Long userId, Long productId, MultipartFile file) throws IOException {
+        if(checkManagerStatus(userId)){
+            Product product = productRepository.findById(productId).get();
+            product.setImage(file.getBytes());
+            productRepository.save(product);
+        }
+        else{
+            throw new RuntimeException("User is not a manager");
+        }
     }
 
     public void signUp(String password, String firstName, String middleName, String lastName, String email){
@@ -82,6 +102,14 @@ public class ManagerService {
             gomartUserRepository.save(gomartUser.get());
             ResponseEntity.ok().body("Logged Out");
         }
+    }
+
+    private boolean checkManagerStatus(Long userId){
+        Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
+        if(gomartUser.isPresent()){
+            return gomartUser.get().getManager().isManagerPerms() && gomartUser.get().isLoginStatus();
+        }
+        return false;
     }
 
 

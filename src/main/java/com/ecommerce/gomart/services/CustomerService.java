@@ -135,87 +135,141 @@ public class CustomerService {
     }
 
     public List<Order> getOrdersByOrderDate(Long userId, LocalDate date){
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        return orderRepository.findByCustomerAndOrderDate(user, date);
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            return orderRepository.findByCustomerAndOrderDate(user, date);
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+            return null;
+        }
     }
 
     public List<Order> getOrdersByOrderDateRange(Long userId, LocalDate startDate, LocalDate endDate){
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        return orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            return orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+            return null;
+        }
     }
 
     public void updateUserInfo(GomartUser user){
-        gomartUserRepository.save(user);
+        if(checkIfUserLoggedIn(user.getUserId())){
+            gomartUserRepository.save(user);
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+        }
+
     }
 
 
     public void deleteUserInfo(Long userId){
-        gomartUserRepository.deleteById(userId);
+        if(checkIfUserLoggedIn(userId)){
+            gomartUserRepository.deleteById(userId);
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+        }
     }
 
     
     public void addToCart(Long userId, Long productId, Integer quantity){
-         GomartUser user = gomartUserRepository.findById(userId).get();
-         Product product = productRepository.findById(productId).get();
-         Cart cart = new Cart().builder()
-                 .customer(user)
-                 .product(product)
-                 .quantity(quantity).
-                 build();
-         cartRepository.save(cart);
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            Product product = productRepository.findById(productId).get();
+            Cart cart = new Cart().builder()
+                    .customer(user)
+                    .product(product)
+                    .quantity(quantity).
+                    build();
+            cartRepository.save(cart);
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+        }
     }
 
     public void removeFromCart(Long userId, Long productId){
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        Product product = productRepository.findById(productId).get();
-        cartRepository.deleteById(cartRepository.findByCustomerAndProduct(user, product).getEntryId());
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            Product product = productRepository.findById(productId).get();
+            cartRepository.deleteById(cartRepository.findByCustomerAndProduct(user, product).getEntryId());
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+        }
+        
     }
 
     public void checkOutFromCart(Long userId){
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        List<Cart> cartList = cartRepository.findByCustomer(user);
-        double total = 0;
-        for(Cart cart: cartList){
-            total += (100 - cart.getProduct().getOffer())/100 * cart.getProduct().getPrice() * cart.getQuantity();
-        }
-        if(total > user.getCustomer().getWallet().getAmount()){
-            throw new RuntimeException("Insufficient Balance");
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            List<Cart> cartList = cartRepository.findByCustomer(user);
+            double total = 0;
+            for(Cart cart: cartList){
+                total += (100 - cart.getProduct().getOffer())/100 * cart.getProduct().getPrice() * cart.getQuantity();
+            }
+            if(total > user.getCustomer().getWallet().getAmount()){
+                throw new RuntimeException("Insufficient Balance");
+            }
+            else{
+                for(Cart cart: cartList){
+                    Order order = new Order().builder()
+                            .customer(cart.getCustomer())
+                            .product(cart.getProduct())
+                            .quantity(cart.getQuantity())
+                            .orderDate(LocalDate.now())
+                            .build();
+                    orderRepository.save(order);
+                    cartRepository.deleteById(cart.getEntryId());
+                    // decrease quantity of product
+                    Product product = cart.getProduct();
+                    product.setQuantity(product.getQuantity() - cart.getQuantity());
+                    productRepository.save(product);
+                }
+                user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() - total);
+                gomartUserRepository.save(user);
+            }
         }
         else{
-            for(Cart cart: cartList){
-                Order order = new Order().builder()
-                        .customer(cart.getCustomer())
-                        .product(cart.getProduct())
-                        .quantity(cart.getQuantity())
-                        .orderDate(LocalDate.now())
-                        .build();
-                orderRepository.save(order);
-                cartRepository.deleteById(cart.getEntryId());
-                // decrease quantity of product
-                Product product = cart.getProduct();
-                product.setQuantity(product.getQuantity() - cart.getQuantity());
-                productRepository.save(product);
-            }
-            user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() - total);
-            gomartUserRepository.save(user);
+            ResponseEntity.status(null).body("User not logged in");
         }
         
         
     }
 
     public void topUpWallet(Long userId, double amount){
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() + amount);
-        gomartUserRepository.save(user);
+        if(checkIfUserLoggedIn(userId)){
+            if(amount > 0){
+                GomartUser user = gomartUserRepository.findById(userId).get();
+                user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() + amount);
+                gomartUserRepository.save(user);
+            }
+            else{
+                throw new RuntimeException("Invalid Amount");
+            }
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+        }
     }
 
     public void changeQuantityOfProductInCart(Long userId, Long productId, Integer quantity){
 
-        GomartUser user = gomartUserRepository.findById(userId).get();
-        Product product = productRepository.findById(productId).get();
-        Cart cart = cartRepository.findByCustomerAndProduct(user, product);
-        cart.setQuantity(quantity);
-        cartRepository.save(cart);
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            Product product = productRepository.findById(productId).get();
+            Cart cart = cartRepository.findByCustomerAndProduct(user, product);
+            cart.setQuantity(quantity);
+            cartRepository.save(cart);
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+        }
     }
 
     private boolean checkIfUserLoggedIn(Long userId){

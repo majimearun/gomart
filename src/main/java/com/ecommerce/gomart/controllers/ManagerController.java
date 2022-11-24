@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.services.ManagerService;
 
 @RestController
@@ -24,22 +22,22 @@ public class ManagerController {
     }
 
     @PostMapping(path = "/addProduct")
-    public void addProduct(@RequestBody Product product){
-        managerService.addProduct(product);
+    public void addProduct(@RequestBody ProductInfo productInfo){
+        managerService.addProduct(productInfo.getUserId(), productInfo.getProduct());
     }
 
     @PostMapping(path = "/updateProduct")
-    public void updateProduct(@RequestBody Product product){
-        managerService.updateProduct(product);
+    public void updateProduct(@RequestBody ProductInfo productInfo){
+        managerService.updateProduct(productInfo.getUserId(), productInfo.getProduct());
     }
 
     @PostMapping(path = "/deleteProduct")
-    public void deleteProduct(@RequestBody Long id){
-        managerService.deleteProduct(id);
+    public void deleteProduct(@RequestBody ProductInfo productInfo){
+        managerService.deleteProduct(productInfo.getUserId(), productInfo.getProduct().getProductId());
     }
 
     @PostMapping(path = "/saveImage")
-    public void saveImage(@RequestParam("file") MultipartFile file, @RequestParam("productId") Long productId) throws IOException {
-        managerService.saveImage(productId, file);
+    public void saveImage(@RequestParam("file") MultipartFile file, @RequestParam("productId") Long productId, @RequestParam("userId") Long userId) throws IOException {
+        managerService.saveImage(userId, productId, file);
     }
 }

@@ -115,4 +115,12 @@ public class AdminService {
         }
     }
 
+    private boolean checkAdmin(Long userId){
+        Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
+        if(gomartUser.isPresent()){
+            return gomartUser.get().getAdmin().isAdminPerms() && gomartUser.get().isLoginStatus();
+        }
+        return false;
+    }
+
 }
