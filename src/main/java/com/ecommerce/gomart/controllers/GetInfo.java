@@ -1,7 +1,5 @@
 package com.ecommerce.gomart.controllers;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.ecommerce.gomart.models.Product;
 
 import lombok.AllArgsConstructor;
@@ -13,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-public class ProductInfo {
+public class GetInfo {
+    private Long senderId;
     private Long userId;
     private Product product;
+    private String name;
     
 }

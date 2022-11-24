@@ -26,52 +26,52 @@ public class AdminController {
     }
 
     @PostMapping(path = "/addManager")
-    public void addManager(@RequestBody Long userId){
-        adminService.giveManagerAccess(userId);
+    public void addManager(@RequestBody GetInfo getInfo){
+        adminService.giveManagerAccess(getInfo.getSenderId(),getInfo.getUserId());
     }
 
     @PostMapping(path = "/removeManager")
-    public void removeManager(@RequestBody Long userId){
-        adminService.removeManagerAccess(userId);
+    public void removeManager(@RequestBody GetInfo getInfo){
+        adminService.removeManagerAccess(getInfo.getSenderId(),getInfo.getUserId());
     }
 
     @PostMapping(path = "/addProduct")
-    public void addProduct(@RequestBody Product product){
-        adminService.addProduct(product);
+    public void addProduct(@RequestBody GetInfo getInfo){
+        adminService.addProduct(getInfo.getSenderId(),getInfo.getProduct());
     }
 
     @PostMapping(path = "/updateProduct")
-    public void updateProduct(@RequestBody Product product){
-        adminService.updateProduct(product);
+    public void updateProduct(@RequestBody GetInfo getInfo){
+        adminService.updateProduct(getInfo.getSenderId(),getInfo.getProduct());
     }
 
     @PostMapping(path = "/deleteProduct")
-    public void deleteProduct(@RequestBody Long id){
-        adminService.deleteProduct(id);
+    public void deleteProduct(@RequestBody GetInfo getInfo){
+        adminService.deleteProduct(getInfo.getSenderId(), getInfo.getProduct().getProductId());
     }
 
     @PostMapping(path = "/report")
     public List<Order> generateReport(@RequestBody GetOrder getOrder){
-        return adminService.getOrdersOfCustomerInDateRange(getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
+        return adminService.getOrdersOfCustomerInDateRange(getOrder.getSenderId(), getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
     }
 
     @GetMapping(path = "/customers")
-    public List<GomartUser> getCustomers(){
-        return adminService.getCustomers();
+    public List<GomartUser> getCustomers(@RequestBody GetInfo getInfo){
+        return adminService.getCustomers(getInfo.getSenderId());
     }
 
     @GetMapping(path = "/products")
-    public List<Product> getProducts(){
-        return adminService.getProducts();
+    public List<Product> getProducts(@RequestBody GetInfo getInfo){
+        return adminService.getProducts(getInfo.getSenderId());
     }
 
     @GetMapping(path = "/managers")
-    public List<GomartUser> getManagers(){
-        return adminService.getManagers();
+    public List<GomartUser> getManagers(@RequestBody GetInfo getInfo){
+        return adminService.getManagers(getInfo.getSenderId());
     }
 
     @GetMapping(path = "/products/{name}")
-    public List<Product> getProductByName(@RequestBody String name){
-        return adminService.getProductsByName(name);
+    public List<Product> getProductByName(@RequestBody GetInfo getInfo){
+        return adminService.getProductsByName(getInfo.getSenderId(), getInfo.getName());
     }
 }

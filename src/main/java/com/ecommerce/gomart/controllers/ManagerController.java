@@ -22,18 +22,18 @@ public class ManagerController {
     }
 
     @PostMapping(path = "/addProduct")
-    public void addProduct(@RequestBody ProductInfo productInfo){
-        managerService.addProduct(productInfo.getUserId(), productInfo.getProduct());
+    public void addProduct(@RequestBody GetInfo getInfo){
+        managerService.addProduct(getInfo.getSenderId(),getInfo.getProduct());
     }
 
     @PostMapping(path = "/updateProduct")
-    public void updateProduct(@RequestBody ProductInfo productInfo){
-        managerService.updateProduct(productInfo.getUserId(), productInfo.getProduct());
+    public void updateProduct(@RequestBody GetInfo getInfo){
+        managerService.updateProduct(getInfo.getSenderId(),getInfo.getProduct());
     }
 
     @PostMapping(path = "/deleteProduct")
-    public void deleteProduct(@RequestBody ProductInfo productInfo){
-        managerService.deleteProduct(productInfo.getUserId(), productInfo.getProduct().getProductId());
+    public void deleteProduct(@RequestBody GetInfo getInfo){
+        managerService.deleteProduct(getInfo.getSenderId(), getInfo.getProduct().getProductId());
     }
 
     @PostMapping(path = "/saveImage")

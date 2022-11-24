@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Builder
 public class GetOrder {
+    private Long senderId;
     private Long userId;
     private LocalDate startDate;
     private LocalDate endDate;
