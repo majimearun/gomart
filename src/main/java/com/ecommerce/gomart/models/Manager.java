@@ -18,6 +18,7 @@ import javax.persistence.Embeddable;
                 name = "managerPerms",
                 column = @Column(name = "manager_perms")
         )
+
 )
 public class Manager{
     @Column(
@@ -27,4 +28,10 @@ public class Manager{
 
     )
     boolean managerPerms;
+
+    @Column(
+        name = "manager_application_status",
+        nullable = true
+    )
+    private ManagerStatus managerApplicationStatus;
 }

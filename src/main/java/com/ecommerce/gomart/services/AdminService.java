@@ -3,6 +3,7 @@ package com.ecommerce.gomart.services;
 import com.ecommerce.gomart.models.Admin;
 import com.ecommerce.gomart.models.GomartUser;
 import com.ecommerce.gomart.models.Manager;
+import com.ecommerce.gomart.models.ManagerStatus;
 import com.ecommerce.gomart.models.Order;
 import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.models.Role;
@@ -61,7 +62,7 @@ public class AdminService {
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             user.setRole(Role.MANAGER);
-            user.setManager(new Manager(true));
+            user.setManager(new Manager(true, ManagerStatus.Approved));
             gomartUserRepository.save(user);
         }
         else{
@@ -73,7 +74,7 @@ public class AdminService {
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             user.setRole(Role.CUSTOMER);
-            user.setManager(new Manager(false));
+            user.setManager(new Manager(false, null));
             gomartUserRepository.save(user);
         }
         else{
@@ -101,14 +102,6 @@ public class AdminService {
         }
     }
 
-    public List<Product> getProducts(Long adminId){
-        if(checkAdminStatus(adminId)){
-            return productRepository.findAll();
-        }
-        else{
-            throw new RuntimeException("User is not an admin");
-        }
-    }
 
     public List<GomartUser> getManagers(Long adminId){
         if(checkAdminStatus(adminId)){
@@ -119,52 +112,14 @@ public class AdminService {
         }
     }
 
-    public List<Product> getProductsByName(Long admnId, String name) {
-        if(checkAdminStatus(admnId)){
-            return productRepository.findByFuzzyName(name);
+    public List<GomartUser> getPendingManagers(Long adminId){
+        if(checkAdminStatus(adminId)){
+            List<GomartUser> managers = gomartUserRepository.findByManagerIsNotNull();
+            managers.removeIf(manager -> manager.getManager().getManagerApplicationStatus() != ManagerStatus.Pending);
+            return managers;
         }
         else{
             throw new RuntimeException("User is not an admin");
-        }
-    }
-
-    public void signUp(String password, String firstName, String middleName, String lastName, String email, Role role){
-        Admin admin = new Admin(true);
-        Manager manager = new Manager(false);
-        GomartUser gomartUser = new GomartUser().builder()
-                .password(password)
-                .loginStatus(false)
-                .firstName(firstName)
-                .middleName(middleName)
-                .lastName(lastName)
-                .email(email)
-                .admin(admin)
-                .manager(manager)
-                .role(role)
-                .build();
-        gomartUserRepository.save(gomartUser);
-    }
-
-    public void login(Long userId, String password){
-        Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
-        if(gomartUser.isPresent()){
-            if(gomartUser.get().getPassword().equals(password)){
-                gomartUser.get().setLoginStatus(true);
-                gomartUserRepository.save(gomartUser.get());
-                ResponseEntity.ok().body("Logged In");
-            }
-            else{
-                ResponseEntity.status(null).body("Incorrect Password");
-            }
-        }
-    }
-
-    public void logout(Long userId){
-        Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
-        if(gomartUser.isPresent()){
-            gomartUser.get().setLoginStatus(false);
-            gomartUserRepository.save(gomartUser.get());
-            ResponseEntity.ok().body("Logged Out");
         }
     }
 

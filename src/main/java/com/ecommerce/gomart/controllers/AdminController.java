@@ -15,7 +15,7 @@ import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.services.AdminService;
 
 @RestController
-@RequestMapping(path = "/api/v1/admin")
+@RequestMapping(path = "/admin")
 public class AdminController {
 
     private final AdminService adminService;
@@ -35,21 +35,6 @@ public class AdminController {
         adminService.removeManagerAccess(getInfo.getSenderId(),getInfo.getUserId());
     }
 
-    @PostMapping(path = "/addProduct")
-    public void addProduct(@RequestBody GetInfo getInfo){
-        adminService.addProduct(getInfo.getSenderId(),getInfo.getProduct());
-    }
-
-    @PostMapping(path = "/updateProduct")
-    public void updateProduct(@RequestBody GetInfo getInfo){
-        adminService.updateProduct(getInfo.getSenderId(),getInfo.getProduct());
-    }
-
-    @PostMapping(path = "/deleteProduct")
-    public void deleteProduct(@RequestBody GetInfo getInfo){
-        adminService.deleteProduct(getInfo.getSenderId(), getInfo.getProduct().getProductId());
-    }
-
     @PostMapping(path = "/report")
     public List<Order> generateReport(@RequestBody GetOrder getOrder){
         return adminService.getOrdersOfCustomerInDateRange(getOrder.getSenderId(), getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
@@ -60,18 +45,13 @@ public class AdminController {
         return adminService.getCustomers(getInfo.getSenderId());
     }
 
-    @GetMapping(path = "/products")
-    public List<Product> getProducts(@RequestBody GetInfo getInfo){
-        return adminService.getProducts(getInfo.getSenderId());
-    }
-
     @GetMapping(path = "/managers")
     public List<GomartUser> getManagers(@RequestBody GetInfo getInfo){
         return adminService.getManagers(getInfo.getSenderId());
     }
 
-    @GetMapping(path = "/products/{name}")
-    public List<Product> getProductByName(@RequestBody GetInfo getInfo){
-        return adminService.getProductsByName(getInfo.getSenderId(), getInfo.getName());
+    @GetMapping(path = "/managers/pending")
+    public List<GomartUser> getPendingManagers(@RequestBody GetInfo getInfo){
+        return adminService.getPendingManagers(getInfo.getSenderId());
     }
 }

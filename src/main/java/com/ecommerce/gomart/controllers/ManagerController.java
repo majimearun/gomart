@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ecommerce.gomart.services.ManagerService;
 
 @RestController
-@RequestMapping(path = "/api/v1/manager")
+@RequestMapping(path = "/manager")
 public class ManagerController {
     private final ManagerService managerService;
 

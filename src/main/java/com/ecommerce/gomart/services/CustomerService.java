@@ -45,7 +45,7 @@ public class CustomerService {
                 .email(email)
                 .customer(customer)
                 .admin(new Admin(false))
-                .manager(new Manager(false))
+                .manager(new Manager(false, null))
                 .role(Role.CUSTOMER)
                 .build();
         gomartUserRepository.save(gomartUser);
@@ -275,6 +275,17 @@ public class CustomerService {
     private boolean checkIfUserLoggedIn(Long userId){
         GomartUser user = gomartUserRepository.findById(userId).get();
         return user.isLoginStatus();
+    }
+
+    public void applyAsManager(Long userId){
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            user.getManager().setManagerApplicationStatus(ManagerStatus.Pending);
+            gomartUserRepository.save(user);
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+        }
     }
 
 

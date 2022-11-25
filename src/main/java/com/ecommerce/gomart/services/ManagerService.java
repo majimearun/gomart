@@ -64,45 +64,6 @@ public class ManagerService {
         }
     }
 
-    public void signUp(String password, String firstName, String middleName, String lastName, String email){
-        Manager manager = new Manager(true);
-        Admin admin = new Admin(false);
-        GomartUser gomartUser = new GomartUser().builder()
-                .password(password)
-                .loginStatus(false)
-                .firstName(firstName)
-                .middleName(middleName)
-                .lastName(lastName)
-                .email(email)
-                .manager(manager)
-                .admin(admin)
-                .role(Role.MANAGER)
-                .build();
-        gomartUserRepository.save(gomartUser);
-    }
-
-    public void login(Long userId, String password){
-        Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
-        if(gomartUser.isPresent()){
-            if(gomartUser.get().getPassword().equals(password)){
-                gomartUser.get().setLoginStatus(true);
-                gomartUserRepository.save(gomartUser.get());
-                ResponseEntity.ok().body("Logged In");
-            }
-            else{
-                ResponseEntity.status(null).body("Incorrect Password");
-            }
-        }
-    }
-
-    public void logout(Long userId){
-        Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
-        if(gomartUser.isPresent()){
-            gomartUser.get().setLoginStatus(false);
-            gomartUserRepository.save(gomartUser.get());
-            ResponseEntity.ok().body("Logged Out");
-        }
-    }
 
     private boolean checkManagerStatus(Long userId){
         Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);

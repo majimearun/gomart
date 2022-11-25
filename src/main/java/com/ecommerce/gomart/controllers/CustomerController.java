@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/v1/user")
+@RequestMapping(path = "/user")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -86,12 +86,12 @@ public class CustomerController {
         return customerService.getOrders(userId);
     }
 
-    @GetMapping(path = "/orders")
+    @PostMapping(path = "/orders")
     public @ResponseBody List<Order> getOrdersByDate(@RequestBody GetOrder getOrder){
         return customerService.getOrdersByOrderDate(getOrder.getUserId(), getOrder.getStartDate());
     }
 
-    @GetMapping(path = "/orders/dateRange")
+    @PostMapping(path = "/orders/dateRange")
     public @ResponseBody List<Order> getOrdersByDateRange(@RequestBody GetOrder getOrder){
         return customerService.getOrdersByOrderDateRange(getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
     }
@@ -109,6 +109,11 @@ public class CustomerController {
     @PostMapping(path = "/signup")
     public void register(@RequestBody Signup signup){
         customerService.signUp(signup.getPassword(), signup.getFirstName(), signup.getLastName(), signup.getDob(), signup.getEmail(), signup.getAmount());
+    }
+
+    @PostMapping(path = "/apply/manager")
+    public void applyForManager(@RequestBody Login login){
+        customerService.applyAsManager(login.getUserId());
     }
 
 

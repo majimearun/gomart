@@ -1,6 +1,7 @@
 package com.ecommerce.gomart.repositories;
 
 import com.ecommerce.gomart.models.GomartUser;
+import com.ecommerce.gomart.models.ManagerStatus;
 import com.ecommerce.gomart.models.Role;
 
 import java.util.List;
