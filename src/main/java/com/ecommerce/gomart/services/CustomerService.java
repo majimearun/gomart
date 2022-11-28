@@ -350,17 +350,5 @@ public class CustomerService {
         }
     }
 
-    public String resetPassword(Long userId){
-        if(checkIfUserLoggedIn(userId)){
-            GomartUser user = gomartUserRepository.findById(userId).get();
-            String newPassword = RandomStringUtils.randomAlphanumeric(10);
-            user.setPassword(hashPassword(newPassword));
-            gomartUserRepository.save(user);
-            return newPassword;
-        }
-        else{
-            ResponseEntity.status(null).body("User not logged in");
-            return "User not logged in";
-        }
-    }
+
 }
