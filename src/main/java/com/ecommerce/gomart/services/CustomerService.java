@@ -7,6 +7,7 @@ import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ public class CustomerService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     CustomerService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, CartRepository cartRepository, ProductRepository productRepository){
@@ -37,7 +39,7 @@ public class CustomerService {
                 wallet
         );
         GomartUser gomartUser = new GomartUser().builder()
-                .password(password)
+                .password(hashPassword(password))
                 .loginStatus(false)
                 .firstName(firstName)
                 .lastName(lastName)
@@ -54,7 +56,7 @@ public class CustomerService {
     public void login(Long userId, String password){
         Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
         if(gomartUser.isPresent()){
-            if(gomartUser.get().getPassword().equals(password)){
+            if(encoder.matches(password, gomartUser.get().getPassword())){
                 gomartUser.get().setLoginStatus(true);
                 gomartUserRepository.save(gomartUser.get());
                 ResponseEntity.ok().body("Logged In");
@@ -286,6 +288,23 @@ public class CustomerService {
         else{
             ResponseEntity.status(null).body("User not logged in");
         }
+    }
+
+    public double getWalletBalance(Long userId){
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            return user.getCustomer().getWallet().getAmount();
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+            return 0;
+        }
+    }
+
+    private String hashPassword(String password){
+
+        String hashedPassword = encoder.encode(password);
+        return hashedPassword;
     }
 
 

@@ -1,7 +1,9 @@
 package com.ecommerce.gomart.models.configs;
 
 import com.ecommerce.gomart.models.Category;
+import com.ecommerce.gomart.models.GomartUser;
 import com.ecommerce.gomart.models.Product;
+import com.ecommerce.gomart.models.Role;
 import com.ecommerce.gomart.repositories.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
