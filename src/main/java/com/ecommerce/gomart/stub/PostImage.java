@@ -1,11 +1,10 @@
-package com.ecommerce.gomart.controllers;
-
-import org.springframework.web.multipart.MultipartFile;
+package com.ecommerce.gomart.stub;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @AllArgsConstructor
 @RequiredArgsConstructor

@@ -1,13 +1,12 @@
 package com.ecommerce.gomart.services;
 
-import com.ecommerce.gomart.controllers.SendCart;
-import com.ecommerce.gomart.controllers.SendOrder;
 import com.ecommerce.gomart.models.*;
 import com.ecommerce.gomart.repositories.CartRepository;
 import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
-
+import com.ecommerce.gomart.stub.SendCart;
+import com.ecommerce.gomart.stub.SendOrder;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

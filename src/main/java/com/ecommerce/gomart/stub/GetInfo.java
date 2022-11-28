@@ -1,7 +1,6 @@
-package com.ecommerce.gomart.controllers;
+package com.ecommerce.gomart.stub;
 
 import com.ecommerce.gomart.models.Product;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
