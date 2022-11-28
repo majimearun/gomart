@@ -9,14 +9,14 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Signup {
-    private String password;
-    private String email;
+public class UserInfo {
+    private Long userId;
     private String firstName;
+    private String middleName;
     private String lastName;
+    private String email;
     private LocalDate dob;
-    private double amount;
-    private String phone;
     private String address;
+    private String phone;
     
 }

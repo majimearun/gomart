@@ -13,7 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByCategory(Category category);
 
-    @Query(value = "SELECT *, LEVENSHTEIN(product_name, :name) FROM gomart_products ORDER BY LEVENSHTEIN(product_name, :name) ASC LIMIT 10", nativeQuery = true)
+    @Query(value = "SELECT *, LEVENSHTEIN(product_name, :name) FROM gomart_products WHERE LEVENSHTEIN(product_name, :name) <= 10 ORDER BY LEVENSHTEIN(product_name, :name) ASC LIMIT 10", nativeQuery = true)
     List<Product> findByFuzzyName(String name);
 
     List<Product> findByCategoryAndPriceBetween(Category category, double min, double max);

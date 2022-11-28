@@ -15,7 +15,8 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "gomart_users", uniqueConstraints = {
-        @UniqueConstraint(name = "unique_email", columnNames = {"email"})
+        @UniqueConstraint(name = "unique_email", columnNames = {"email"}),
+        @UniqueConstraint(name = "unique_phone", columnNames = {"phone_number"})
 })
 public class GomartUser {
         @Id
@@ -74,11 +75,29 @@ public class GomartUser {
         private String email;
 
         @Column(
+                name = "phone_number",
+                nullable = false
+        )
+        private String phoneNumber;
+
+        @Column(
+                name = "address",
+                nullable = false
+        )
+        private String address;
+
+        @Column(
                 name = "role",
                 nullable = false
         )
         @Enumerated(EnumType.STRING)
         private Role role;
+
+        @Column(
+                name = "password_reset_token",
+                nullable = true
+        )
+        private String passwordResetToken;
 
         @Embedded
         private Customer customer;
@@ -88,5 +107,6 @@ public class GomartUser {
 
         @Embedded
         private Admin admin;
+
 
 }

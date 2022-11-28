@@ -52,8 +52,8 @@ public class CustomerController {
     }
 
     @PutMapping(path = "/{userId}")
-    public void updateUserInfo(@PathVariable Long userId, @RequestBody GomartUser user){
-        customerService.updateUserInfo(user);
+    public void updateUserInfo(@PathVariable Long userId, @RequestBody UserInfo userInfo){
+        customerService.updateUserInfo(userInfo.getUserId(), userInfo.getFirstName(), userInfo.getMiddleName(), userInfo.getLastName(),  userInfo.getDob(),userInfo.getEmail(), userInfo.getAddress(), userInfo.getPhone());
     }
 
     @PostMapping(path = "/addToCart")
@@ -62,7 +62,7 @@ public class CustomerController {
     }
 
     @GetMapping(path = "/{userId}/cart")
-    public @ResponseBody List<Cart> getCart(@PathVariable Long userId){
+    public @ResponseBody List<SendCart> getCart(@PathVariable Long userId){
         return customerService.getCart(userId);
     }
 
@@ -82,23 +82,23 @@ public class CustomerController {
     }
 
     @GetMapping(path = "/{userId}/orders")
-    public @ResponseBody List<Order> getOrders(@PathVariable Long userId){
+    public @ResponseBody List<SendOrder> getOrders(@PathVariable Long userId){
         return customerService.getOrders(userId);
     }
 
     @PostMapping(path = "/orders")
-    public @ResponseBody List<Order> getOrdersByDate(@RequestBody GetOrder getOrder){
+    public @ResponseBody List<SendOrder> getOrdersByDate(@RequestBody GetOrder getOrder){
         return customerService.getOrdersByOrderDate(getOrder.getUserId(), getOrder.getStartDate());
     }
 
     @PostMapping(path = "/orders/dateRange")
-    public @ResponseBody List<Order> getOrdersByDateRange(@RequestBody GetOrder getOrder){
+    public @ResponseBody List<SendOrder> getOrdersByDateRange(@RequestBody GetOrder getOrder){
         return customerService.getOrdersByOrderDateRange(getOrder.getUserId(), getOrder.getStartDate(), getOrder.getEndDate());
     }
 
     @PostMapping(path = "/login")
-    public void login(@RequestBody Login login){
-        customerService.login(login.getUserId(), login.getPassword());
+    public Long login(@RequestBody Login login){
+        return customerService.login(login.getEmail(), login.getPassword());
     }
 
     @PostMapping(path = "/logout")
@@ -108,7 +108,7 @@ public class CustomerController {
 
     @PostMapping(path = "/signup")
     public void register(@RequestBody Signup signup){
-        customerService.signUp(signup.getPassword(), signup.getFirstName(), signup.getLastName(), signup.getDob(), signup.getEmail(), signup.getAmount());
+        customerService.signUp(signup.getPassword(), signup.getFirstName(), signup.getLastName(), signup.getDob(), signup.getEmail(), signup.getAmount(), signup.getAddress(), signup.getPhone());
     }
 
     @PostMapping(path = "/apply/manager")

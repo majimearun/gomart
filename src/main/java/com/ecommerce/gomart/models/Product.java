@@ -72,4 +72,11 @@ public class Product {
     )
     private Double offer;
 
+    @Column(
+        name = "delivery_time",
+        nullable = false
+    )
+    // in days
+    private Integer deliveryTime;
+
 }

@@ -1,5 +1,7 @@
 package com.ecommerce.gomart.services;
 
+import com.ecommerce.gomart.controllers.SendOrder;
+import com.ecommerce.gomart.controllers.UserInfo;
 import com.ecommerce.gomart.models.Admin;
 import com.ecommerce.gomart.models.GomartUser;
 import com.ecommerce.gomart.models.Manager;
@@ -11,12 +13,16 @@ import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AdminService {
@@ -82,10 +88,12 @@ public class AdminService {
         }
     }
 
-    public List<Order> getOrdersOfCustomerInDateRange(Long adminId, Long userId, LocalDate startDate, LocalDate endDate){
+    public List<SendOrder> getOrdersOfCustomerInDateRange(Long adminId, Long userId, LocalDate startDate, LocalDate endDate){
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
-            return orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
+            List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
+            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(), order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
+            return send;
         }
         else{
             throw new RuntimeException("User is not an admin");
@@ -93,9 +101,11 @@ public class AdminService {
         
     }
 
-    public List<GomartUser> getCustomers(Long adminId){
+    public List<UserInfo> getCustomers(Long adminId){
         if(checkAdminStatus(adminId)){
-            return gomartUserRepository.findByRole(Role.CUSTOMER);
+            List<GomartUser> users = gomartUserRepository.findByRole(Role.CUSTOMER);
+            List<UserInfo> send = users.stream().map(user -> new UserInfo(user.getUserId(), user.getFirstName(), user.getMiddleName(), user.getLastName(), user.getEmail(), user.getDob(), user.getAddress(), user.getPhoneNumber())).collect(Collectors.toList());
+            return send;
         }
         else{
             throw new RuntimeException("User is not an admin");
@@ -103,20 +113,23 @@ public class AdminService {
     }
 
 
-    public List<GomartUser> getManagers(Long adminId){
+    public List<UserInfo> getManagers(Long adminId){
         if(checkAdminStatus(adminId)){
-            return gomartUserRepository.findByManagerIsNotNull();
+            List<GomartUser> users = gomartUserRepository.findByRole(Role.MANAGER);
+            List<UserInfo> send = users.stream().map(user -> new UserInfo(user.getUserId(), user.getFirstName(), user.getMiddleName(), user.getLastName(), user.getEmail(), user.getDob(), user.getAddress(), user.getPhoneNumber())).collect(Collectors.toList());
+            return send;
         }
         else{
             throw new RuntimeException("User is not an admin");
         }
     }
 
-    public List<GomartUser> getPendingManagers(Long adminId){
+    public List<UserInfo> getPendingManagers(Long adminId){
         if(checkAdminStatus(adminId)){
             List<GomartUser> managers = gomartUserRepository.findByManagerIsNotNull();
             managers.removeIf(manager -> manager.getManager().getManagerApplicationStatus() != ManagerStatus.Pending);
-            return managers;
+            List<UserInfo> send = managers.stream().map(user -> new UserInfo(user.getUserId(), user.getFirstName(), user.getMiddleName(), user.getLastName(), user.getEmail(), user.getDob(), user.getAddress(), user.getPhoneNumber())).collect(Collectors.toList());
+            return send;
         }
         else{
             throw new RuntimeException("User is not an admin");
@@ -129,6 +142,17 @@ public class AdminService {
             return gomartUser.get().getAdmin().isAdminPerms() && gomartUser.get().isLoginStatus();
         }
         return false;
+    }
+
+    public void saveImage(Long userId, Long productId, MultipartFile file) throws IOException {
+        if(checkAdminStatus(userId)){
+            Product product = productRepository.findById(productId).get();
+            product.setImage(file.getBytes());
+            productRepository.save(product);
+        }
+        else{
+            throw new RuntimeException("User is not a manager");
+        }
     }
 
 }

@@ -1,15 +1,17 @@
 package com.ecommerce.gomart.controllers;
 
+import com.ecommerce.gomart.models.Product;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Login {
-    private String email;
-    private String password;
-    Long userId;
-
+@Builder
+public class SendCart {
+    private Product product;
+    private int quantity;
 }
