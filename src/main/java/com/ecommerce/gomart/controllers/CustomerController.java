@@ -115,6 +115,16 @@ public class CustomerController {
         customerService.applyAsManager(login.getUserId());
     }
 
+    @PostMapping(path = "/deleteAccount")
+    public void deleteAccount(@RequestBody Login login){
+        customerService.deleteUserInfo(login.getUserId());
+    }
+
+    @PostMapping(path = "/changePasssword")
+    public void changePassword(@RequestBody ChangePassword changePassword){
+        customerService.resetPassword(changePassword.getUserId(), changePassword.getOldPassword(), changePassword.getNewPassword());
+    }
+
 
 }
 
