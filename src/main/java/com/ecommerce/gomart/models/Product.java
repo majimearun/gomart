@@ -5,7 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 import javax.persistence.*;
+
+import com.ecommerce.gomart.repositories.CartRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(
@@ -78,5 +83,30 @@ public class Product {
     )
     // in days
     private Integer deliveryTime;
+
+    // one to many relationship with cart
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Cart> carts;
+
+    // one to many relationship with orders
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Order> orders;
+
+    public void setCarts(List<Cart> carts) {
+        this.carts.clear();
+        if (carts != null) {
+            this.carts.addAll(carts);
+        }
+    }
+
+        public void setOrders(List<Order> orders) {
+                this.orders.clear();
+                if (orders != null) {
+                this.orders.addAll(orders);
+                }
+        }
+
 
 }

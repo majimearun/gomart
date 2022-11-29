@@ -7,7 +7,11 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -108,5 +112,28 @@ public class GomartUser {
         @Embedded
         private Admin admin;
 
+        // one to many relationship with cart
+        @OneToMany(mappedBy = "customer", orphanRemoval = true, cascade = CascadeType.ALL)
+        @JsonIgnore
+        private List<Cart> carts;
+
+        // one to many relationship with orders
+        @OneToMany(mappedBy = "customer", orphanRemoval = true, cascade = CascadeType.ALL)
+        @JsonIgnore
+        private List<Order> orders;
+
+        public void setCarts(List<Cart> carts) {
+                this.carts.clear();
+                if (carts != null) {
+                    this.carts.addAll(carts);
+                }
+            }
+        
+                public void setOrders(List<Order> orders) {
+                        this.orders.clear();
+                        if (orders != null) {
+                        this.orders.addAll(orders);
+                        }
+                }
 
 }
