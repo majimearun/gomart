@@ -210,12 +210,21 @@ public class CustomerService {
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             Product product = productRepository.findById(productId).get();
-            Cart cart = new Cart().builder()
-                    .customer(user)
-                    .product(product)
-                    .quantity(quantity).
-                    build();
-            cartRepository.save(cart);
+            // check if product is already in cart
+            Optional<Cart> cart = cartRepository.findByCustomerAndProduct(user, product);
+            if(cart.isPresent()){
+                Cart newCart = cart.get();
+                newCart.setQuantity(newCart.getQuantity() + quantity);
+                cartRepository.save(newCart);
+            }
+            else{
+                Cart newCart = new Cart();
+                newCart.setCustomer(user);
+                newCart.setProduct(product);
+                newCart.setQuantity(quantity);
+                cartRepository.save(newCart);
+            }
+            
         }
         else{
             ResponseEntity.status(null).body("User not logged in");
@@ -226,7 +235,7 @@ public class CustomerService {
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             Product product = productRepository.findById(productId).get();
-            cartRepository.deleteById(cartRepository.findByCustomerAndProduct(user, product).getEntryId());
+            cartRepository.deleteById(cartRepository.findByCustomerAndProduct(user, product).get().getEntryId());
         }
         else{
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
@@ -292,7 +301,7 @@ public class CustomerService {
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             Product product = productRepository.findById(productId).get();
-            Cart cart = cartRepository.findByCustomerAndProduct(user, product);
+            Cart cart = cartRepository.findByCustomerAndProduct(user, product).get();
             cart.setQuantity(quantity);
             cartRepository.save(cart);
         }
