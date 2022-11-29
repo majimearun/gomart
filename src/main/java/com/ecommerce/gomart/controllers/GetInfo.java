@@ -1,21 +1,20 @@
-package com.ecommerce.gomart.stub;
+package com.ecommerce.gomart.controllers;
 
 import com.ecommerce.gomart.models.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-public class SendOrder {
-    private Long transactionId;
+public class GetInfo {
+    private Long senderId;
+    private Long userId;
     private Product product;
-    private int quantity;
-    private LocalDate orderDate;
+    private String name;
     
 }

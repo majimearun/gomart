@@ -1,4 +1,4 @@
-package com.ecommerce.gomart.stub;
+package com.ecommerce.gomart.controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class GetProduct {
-    private int category;
-    private double min;
-    private double max;
+public class Login {
+    private String email;
+    private String password;
+    Long userId;
+
 }

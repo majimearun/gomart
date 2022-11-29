@@ -1,13 +1,16 @@
-package com.ecommerce.gomart.stub;
+package com.ecommerce.gomart.controllers;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class GetWallet {
+@Data
+@Builder
+public class GetCart {
     private Long userId;
-    private double amount;
+    private Long productId;
+    private Integer quantity;
 }

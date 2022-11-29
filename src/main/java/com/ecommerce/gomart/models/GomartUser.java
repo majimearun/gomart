@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -94,6 +93,12 @@ public class GomartUser {
         @Enumerated(EnumType.STRING)
         private Role role;
 
+        @Column(
+                name = "password_reset_token",
+                nullable = true
+        )
+        private String passwordResetToken;
+
         @Embedded
         private Customer customer;
 
@@ -102,22 +107,6 @@ public class GomartUser {
 
         @Embedded
         private Admin admin;
-
-        @OneToMany(
-                mappedBy = "customer",
-                cascade = CascadeType.ALL,
-                orphanRemoval = true
-        )
-        private List<Cart> cartItems;
-
-        @OneToMany(
-                mappedBy = "customer",
-                cascade = CascadeType.ALL,
-                orphanRemoval = true
-        )
-        private List<Order> orders;
-
-        
 
 
 }

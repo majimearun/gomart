@@ -1,19 +1,19 @@
 package com.ecommerce.gomart.controllers;
 
-import com.ecommerce.gomart.services.AdminService;
-import com.ecommerce.gomart.stub.GetInfo;
-import com.ecommerce.gomart.stub.GetOrder;
-import com.ecommerce.gomart.stub.SendOrder;
-import com.ecommerce.gomart.stub.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.ecommerce.gomart.services.AdminService;
+
 @RestController
-@CrossOrigin
 @RequestMapping(path = "/admin")
 public class AdminController {
 

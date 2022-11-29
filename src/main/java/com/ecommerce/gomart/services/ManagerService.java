@@ -1,16 +1,17 @@
 package com.ecommerce.gomart.services;
 
-import com.ecommerce.gomart.models.GomartUser;
-import com.ecommerce.gomart.models.Product;
+import com.ecommerce.gomart.models.*;
 import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ManagerService {

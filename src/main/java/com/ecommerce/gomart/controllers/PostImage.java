@@ -1,4 +1,6 @@
-package com.ecommerce.gomart.stub;
+package com.ecommerce.gomart.controllers;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Data
 @Builder
-public class GetCart {
-    private Long userId;
+public class PostImage {
     private Long productId;
-    private Integer quantity;
+    private MultipartFile file;
+
 }

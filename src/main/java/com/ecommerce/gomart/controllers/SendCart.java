@@ -1,6 +1,7 @@
-package com.ecommerce.gomart.stub;
+package com.ecommerce.gomart.controllers;
 
 import com.ecommerce.gomart.models.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-public class GetInfo {
-    private Long senderId;
-    private Long userId;
+public class SendCart {
     private Product product;
-    private String name;
-    
+    private int quantity;
 }

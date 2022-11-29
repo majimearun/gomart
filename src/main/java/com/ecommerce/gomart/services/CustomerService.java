@@ -1,12 +1,13 @@
 package com.ecommerce.gomart.services;
 
+import com.ecommerce.gomart.controllers.SendCart;
+import com.ecommerce.gomart.controllers.SendOrder;
 import com.ecommerce.gomart.models.*;
 import com.ecommerce.gomart.repositories.CartRepository;
 import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
-import com.ecommerce.gomart.stub.SendCart;
-import com.ecommerce.gomart.stub.SendOrder;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -350,5 +351,17 @@ public class CustomerService {
         }
     }
 
-
+    public String resetPassword(Long userId){
+        if(checkIfUserLoggedIn(userId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            String newPassword = RandomStringUtils.randomAlphanumeric(10);
+            user.setPassword(hashPassword(newPassword));
+            gomartUserRepository.save(user);
+            return newPassword;
+        }
+        else{
+            ResponseEntity.status(null).body("User not logged in");
+            return "User not logged in";
+        }
+    }
 }

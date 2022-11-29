@@ -1,16 +1,13 @@
-package com.ecommerce.gomart.stub;
+package com.ecommerce.gomart.controllers;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Builder
-public class ChangePassword {
+public class GetWallet {
     private Long userId;
-    private String oldPassword;
-    private String newPassword;
+    private double amount;
 }

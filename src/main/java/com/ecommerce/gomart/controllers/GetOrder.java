@@ -1,11 +1,11 @@
-package com.ecommerce.gomart.stub;
+package com.ecommerce.gomart.controllers;
+
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
