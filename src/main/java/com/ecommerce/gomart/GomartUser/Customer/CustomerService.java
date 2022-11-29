@@ -224,19 +224,24 @@ public class CustomerService {
                 if(newCart.getQuantity() + quantity > product.getQuantity()){
                     newCart.setQuantity(product.getQuantity());
                     ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not enough quantity. already maximum");
+                    cartRepository.save(newCart);
                 }
                 else{
                     newCart.setQuantity(newCart.getQuantity() + quantity);
                     cartRepository.save(newCart);
                 }
-                newCart.setQuantity(newCart.getQuantity() + quantity);
-                cartRepository.save(newCart);
             }
             else{
                 Cart newCart = new Cart();
                 newCart.setCustomer(user);
                 newCart.setProduct(product);
-                newCart.setQuantity(quantity);
+                if(quantity > product.getQuantity()){
+                    newCart.setQuantity(product.getQuantity());
+                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not enough quantity. already maximum");
+                }
+                else{
+                    newCart.setQuantity(quantity);
+                }
                 cartRepository.save(newCart);
             }
             

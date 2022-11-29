@@ -39,8 +39,4 @@ public class ManagerController {
         managerService.saveImage(userId, productId, file);
     }
 
-    @PostMapping(path = "/products")
-    public Iterable<Product> getProducts(@RequestBody GetInfo getInfo){
-        return managerService.getAllProducts(getInfo.getSenderId());
-    }
 }

@@ -74,8 +74,4 @@ public class AdminController {
         adminService.saveImage(userId, productId, file);
     }
 
-    @PostMapping(path = "/products")
-    public Iterable<Product> getProducts(@RequestBody GetInfo getInfo){
-        return adminService.getAllProducts(getInfo.getSenderId());
-    }
 }
