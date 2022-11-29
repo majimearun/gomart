@@ -149,7 +149,16 @@ public class AdminService {
             productRepository.save(product);
         }
         else{
-            throw new RuntimeException("User is not a manager");
+            throw new RuntimeException("User is not a admin");
+        }
+    }
+
+    public List<Product> getAllProducts(Long userId){
+        if(checkAdminStatus(userId)){
+            return productRepository.findAll();
+        }
+        else{
+            throw new RuntimeException("User is not a admin");
         }
     }
 

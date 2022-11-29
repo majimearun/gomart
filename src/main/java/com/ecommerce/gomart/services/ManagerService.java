@@ -6,6 +6,7 @@ import com.ecommerce.gomart.repositories.OrderRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,15 @@ public class ManagerService {
             Product product = productRepository.findById(productId).get();
             product.setImage(file.getBytes());
             productRepository.save(product);
+        }
+        else{
+            throw new RuntimeException("User is not a manager");
+        }
+    }
+
+    public List<Product> getAllProducts(Long userId){
+        if(checkManagerStatus(userId)){
+            return productRepository.findAll();
         }
         else{
             throw new RuntimeException("User is not a manager");

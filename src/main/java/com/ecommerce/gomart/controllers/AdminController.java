@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.services.AdminService;
 
 @RestController
@@ -74,5 +75,10 @@ public class AdminController {
     @PostMapping(path = "/saveImage")
     public void saveImage(@RequestParam("file") MultipartFile file, @RequestParam("productId") Long productId, @RequestParam("userId") Long userId) throws IOException {
         adminService.saveImage(userId, productId, file);
+    }
+
+    @PostMapping(path = "/products")
+    public Iterable<Product> getProducts(@RequestBody GetInfo getInfo){
+        return adminService.getAllProducts(getInfo.getSenderId());
     }
 }
