@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+@Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Data
 @Builder
 public class PostImage {
     private Long productId;

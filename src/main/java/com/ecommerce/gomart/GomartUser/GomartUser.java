@@ -16,10 +16,10 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Data
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
-@Data
 @Entity
 @Table(name = "gomart_users", uniqueConstraints = {
         @UniqueConstraint(name = "unique_email", columnNames = {"email"}),

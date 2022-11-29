@@ -5,9 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Data
 @Builder
 public class GetCart {
     private Long userId;
