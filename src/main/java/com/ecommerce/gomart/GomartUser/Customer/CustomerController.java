@@ -51,7 +51,7 @@ public class CustomerController {
         return customerService.getUserInfo(userId);
     }
 
-    @PutMapping(path = "/{userId}")
+    @PostMapping(path = "/{userId}")
     public void updateUserInfo(@PathVariable Long userId, @RequestBody UserInfo userInfo){
         customerService.updateUserInfo(userInfo.getUserId(), userInfo.getFirstName(), userInfo.getMiddleName(), userInfo.getLastName(),  userInfo.getDob(),userInfo.getEmail(), userInfo.getAddress(), userInfo.getPhone());
     }
@@ -66,7 +66,7 @@ public class CustomerController {
         return customerService.getCart(userId);
     }
 
-    @PatchMapping(path = "/cart")
+    @PostMapping(path = "/cart")
     public void updateCart(@RequestBody GetCart getCart){
         customerService.changeQuantityOfProductInCart(getCart.getUserId(), getCart.getProductId(), getCart.getQuantity());
     }
