@@ -1,4 +1,4 @@
-package com.ecommerce.gomart.models;
+package com.ecommerce.gomart.Product;
 
 public enum Category {
     HomeAppliances,

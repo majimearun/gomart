@@ -1,26 +1,25 @@
-package com.ecommerce.gomart.services;
+package com.ecommerce.gomart.GomartUser.Admin;
 
-import com.ecommerce.gomart.controllers.SendOrder;
-import com.ecommerce.gomart.controllers.UserInfo;
-import com.ecommerce.gomart.models.GomartUser;
-import com.ecommerce.gomart.models.Manager;
-import com.ecommerce.gomart.models.ManagerStatus;
-import com.ecommerce.gomart.models.Order;
-import com.ecommerce.gomart.models.Product;
-import com.ecommerce.gomart.models.Role;
-import com.ecommerce.gomart.repositories.GomartUserRepository;
-import com.ecommerce.gomart.repositories.OrderRepository;
-import com.ecommerce.gomart.repositories.ProductRepository;
+import com.ecommerce.gomart.GomartUser.GomartUser;
+import com.ecommerce.gomart.GomartUser.GomartUserRepository;
+import com.ecommerce.gomart.GomartUser.Manager.Manager;
+import com.ecommerce.gomart.GomartUser.Manager.ManagerStatus;
+import com.ecommerce.gomart.GomartUser.Role;
+import com.ecommerce.gomart.Order.Order;
+import com.ecommerce.gomart.Order.OrderRepository;
+import com.ecommerce.gomart.Product.Product;
+import com.ecommerce.gomart.Product.ProductRepository;
+import com.ecommerce.gomart.Stubs.SendOrder;
+import com.ecommerce.gomart.Stubs.UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AdminService {

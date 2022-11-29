@@ -1,8 +1,7 @@
-package com.ecommerce.gomart.repositories;
+package com.ecommerce.gomart.Cart;
 
-import com.ecommerce.gomart.models.Cart;
-import com.ecommerce.gomart.models.GomartUser;
-import com.ecommerce.gomart.models.Product;
+import com.ecommerce.gomart.GomartUser.GomartUser;
+import com.ecommerce.gomart.Product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

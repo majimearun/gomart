@@ -1,21 +1,21 @@
-package com.ecommerce.gomart.models.configs;
+package com.ecommerce.gomart.Config;
 
 import com.ecommerce.gomart.GomartUser.Admin.Admin;
-import com.ecommerce.gomart.Product.Category;
 import com.ecommerce.gomart.GomartUser.Customer.Customer;
-import com.ecommerce.gomart.GomartUser.GomartUser;
-import com.ecommerce.gomart.GomartUser.Manager.Manager;
-import com.ecommerce.gomart.Product.Product;
-import com.ecommerce.gomart.GomartUser.Role;
 import com.ecommerce.gomart.GomartUser.Customer.Wallet;
+import com.ecommerce.gomart.GomartUser.GomartUser;
 import com.ecommerce.gomart.GomartUser.GomartUserRepository;
+import com.ecommerce.gomart.GomartUser.Manager.Manager;
+import com.ecommerce.gomart.GomartUser.Role;
+import com.ecommerce.gomart.Product.Category;
+import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
-import java.time.LocalDate;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.time.LocalDate;
 
 @Configuration
 public class ProductConfig {

@@ -1,15 +1,18 @@
-package com.ecommerce.gomart.models;
+package com.ecommerce.gomart.GomartUser;
 
 
+import com.ecommerce.gomart.Cart.Cart;
+import com.ecommerce.gomart.GomartUser.Admin.Admin;
+import com.ecommerce.gomart.GomartUser.Customer.Customer;
+import com.ecommerce.gomart.GomartUser.Manager.Manager;
+import com.ecommerce.gomart.Order.Order;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.time.LocalDate;
 import java.util.List;
 

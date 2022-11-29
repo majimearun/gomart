@@ -1,7 +1,5 @@
-package com.ecommerce.gomart.repositories;
+package com.ecommerce.gomart.Product;
 
-import com.ecommerce.gomart.models.Category;
-import com.ecommerce.gomart.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

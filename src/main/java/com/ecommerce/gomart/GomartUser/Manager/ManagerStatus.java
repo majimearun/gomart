@@ -1,4 +1,4 @@
-package com.ecommerce.gomart.models;
+package com.ecommerce.gomart.GomartUser.Manager;
 
 public enum ManagerStatus {
     Pending,

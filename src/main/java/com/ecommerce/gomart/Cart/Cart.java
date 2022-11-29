@@ -1,5 +1,7 @@
-package com.ecommerce.gomart.models;
+package com.ecommerce.gomart.Cart;
 
+import com.ecommerce.gomart.GomartUser.GomartUser;
+import com.ecommerce.gomart.Product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

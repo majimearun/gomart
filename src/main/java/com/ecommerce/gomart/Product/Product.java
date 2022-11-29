@@ -1,16 +1,15 @@
-package com.ecommerce.gomart.models;
+package com.ecommerce.gomart.Product;
 
+import com.ecommerce.gomart.Cart.Cart;
+import com.ecommerce.gomart.Order.Order;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 import javax.persistence.*;
-
-import com.ecommerce.gomart.repositories.CartRepository;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 
 @Entity
 @Table(

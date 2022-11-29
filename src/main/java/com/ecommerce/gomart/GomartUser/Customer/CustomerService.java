@@ -1,13 +1,20 @@
-package com.ecommerce.gomart.services;
+package com.ecommerce.gomart.GomartUser.Customer;
 
-import com.ecommerce.gomart.controllers.SendCart;
-import com.ecommerce.gomart.controllers.SendOrder;
-import com.ecommerce.gomart.models.*;
-import com.ecommerce.gomart.repositories.CartRepository;
-import com.ecommerce.gomart.repositories.GomartUserRepository;
-import com.ecommerce.gomart.repositories.OrderRepository;
-import com.ecommerce.gomart.repositories.ProductRepository;
-
+import com.ecommerce.gomart.Cart.Cart;
+import com.ecommerce.gomart.Cart.CartRepository;
+import com.ecommerce.gomart.GomartUser.Admin.Admin;
+import com.ecommerce.gomart.GomartUser.GomartUser;
+import com.ecommerce.gomart.GomartUser.GomartUserRepository;
+import com.ecommerce.gomart.GomartUser.Manager.Manager;
+import com.ecommerce.gomart.GomartUser.Manager.ManagerStatus;
+import com.ecommerce.gomart.GomartUser.Role;
+import com.ecommerce.gomart.Order.Order;
+import com.ecommerce.gomart.Order.OrderRepository;
+import com.ecommerce.gomart.Product.Category;
+import com.ecommerce.gomart.Product.Product;
+import com.ecommerce.gomart.Product.ProductRepository;
+import com.ecommerce.gomart.Stubs.SendCart;
+import com.ecommerce.gomart.Stubs.SendOrder;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

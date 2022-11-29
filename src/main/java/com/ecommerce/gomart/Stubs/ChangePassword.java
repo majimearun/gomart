@@ -1,4 +1,4 @@
-package com.ecommerce.gomart.controllers;
+package com.ecommerce.gomart.Stubs;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

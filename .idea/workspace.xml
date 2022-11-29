@@ -4,7 +4,47 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2f4824ee-05b9-4907-9e27-9354d62913e6" name="Changes" comment="" />
+    <list default="true" id="2f4824ee-05b9-4907-9e27-9354d62913e6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Admin/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/ChangePassword.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/ChangePassword.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Customer/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/GetCart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/GetCart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/GetInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/GetInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/GetOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/GetOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/GetProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/GetProduct.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/GetWallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/GetWallet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Manager/ManagerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/PostImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/PostImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/SendCart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/SendCart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/SendOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/SendOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/Signup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/Signup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/controllers/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Stubs/UserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Admin/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Cart/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Product/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Customer/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/GomartUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/GomartUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Manager/Manager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/ManagerStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Manager/ManagerStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Order/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Product/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/Wallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Customer/Wallet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/models/configs/ProductConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Config/ProductConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/repositories/CartRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Cart/CartRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/repositories/GomartUserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/GomartUserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/repositories/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Order/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/repositories/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/Product/ProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/services/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Admin/AdminService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/services/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Customer/CustomerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/services/ManagerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/gomart/GomartUser/Manager/ManagerService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +52,18 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -32,10 +84,21 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/majime/Downloads/old/gomart-83e5ceabf5deec7e731a0c462652890e69846554"
+    "last_opened_file_path": "/home/majime/programming/github/gomart",
+    "spring.configuration.checksum": "fd3cc457e2092cc8f9a1cb0983c09f31"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="GomartApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="gomart" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ecommerce.gomart.GomartApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -45,6 +108,7 @@
       <option name="presentableId" value="Default" />
       <updated>1669726320678</updated>
       <workItem from="1669726320856" duration="20000" />
+      <workItem from="1669749586718" duration="339000" />
     </task>
     <servers />
   </component>

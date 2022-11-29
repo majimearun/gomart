@@ -1,10 +1,11 @@
-package com.ecommerce.gomart.controllers;
+package com.ecommerce.gomart.GomartUser.Customer;
 
-import com.ecommerce.gomart.models.GomartUser;
-import com.ecommerce.gomart.models.Product;
-import com.ecommerce.gomart.services.CustomerService;
+import com.ecommerce.gomart.GomartUser.GomartUser;
+import com.ecommerce.gomart.Product.Product;
+import com.ecommerce.gomart.Stubs.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController

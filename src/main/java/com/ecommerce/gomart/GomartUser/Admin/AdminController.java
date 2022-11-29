@@ -1,19 +1,16 @@
-package com.ecommerce.gomart.controllers;
+package com.ecommerce.gomart.GomartUser.Admin;
+
+import com.ecommerce.gomart.Product.Product;
+import com.ecommerce.gomart.Stubs.GetInfo;
+import com.ecommerce.gomart.Stubs.GetOrder;
+import com.ecommerce.gomart.Stubs.SendOrder;
+import com.ecommerce.gomart.Stubs.UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.ecommerce.gomart.models.Product;
-import com.ecommerce.gomart.services.AdminService;
 
 @RestController
 @CrossOrigin
