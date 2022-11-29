@@ -5,15 +5,11 @@ import com.ecommerce.gomart.models.Category;
 import com.ecommerce.gomart.models.Customer;
 import com.ecommerce.gomart.models.GomartUser;
 import com.ecommerce.gomart.models.Manager;
-import com.ecommerce.gomart.models.ManagerStatus;
 import com.ecommerce.gomart.models.Product;
 import com.ecommerce.gomart.models.Role;
 import com.ecommerce.gomart.models.Wallet;
 import com.ecommerce.gomart.repositories.GomartUserRepository;
 import com.ecommerce.gomart.repositories.ProductRepository;
-
-import net.bytebuddy.asm.Advice.Local;
-
 import java.time.LocalDate;
 
 import org.springframework.boot.CommandLineRunner;

@@ -2,7 +2,6 @@ package com.ecommerce.gomart.services;
 
 import com.ecommerce.gomart.controllers.SendOrder;
 import com.ecommerce.gomart.controllers.UserInfo;
-import com.ecommerce.gomart.models.Admin;
 import com.ecommerce.gomart.models.GomartUser;
 import com.ecommerce.gomart.models.Manager;
 import com.ecommerce.gomart.models.ManagerStatus;
@@ -20,7 +19,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

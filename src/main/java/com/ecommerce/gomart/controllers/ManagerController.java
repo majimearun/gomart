@@ -3,6 +3,7 @@ package com.ecommerce.gomart.controllers;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ecommerce.gomart.services.ManagerService;
 
 @RestController
+@CrossOrigin
 @RequestMapping(path = "/manager")
 public class ManagerController {
     private final ManagerService managerService;
