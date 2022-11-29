@@ -18,7 +18,7 @@ CommandLineRunner commandLineRunner(ProductRepository productRepository, GomartU
         
 
         Product p1 = new Product().builder()
-                .name("Apple")
+                .name("Namdhari's 1 dozen apples")
                 .price(55)
                 .description("Fresh Apple")
                 .quantity(10)
@@ -30,7 +30,7 @@ CommandLineRunner commandLineRunner(ProductRepository productRepository, GomartU
         productRepository.save(p1);
 
         Product p2 = new Product().builder()
-                .name("Lays Chips")
+                .name("Lays Chips: Magic Masala")
                 .price(20)
                 .description("Big packet")
                 .quantity(200)
@@ -54,7 +54,7 @@ CommandLineRunner commandLineRunner(ProductRepository productRepository, GomartU
         productRepository.save(p3);
 
         Product p4 = new Product().builder()
-                .name("Mixie")
+                .name("Prestige Handy Mixie")
                 .price(199)
                 .description("Mixie with 3 jars")
                 .quantity(10)
