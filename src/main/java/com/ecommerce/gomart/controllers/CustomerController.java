@@ -120,7 +120,7 @@ public class CustomerController {
         customerService.deleteUserInfo(login.getUserId());
     }
 
-    @PostMapping(path = "/changePasssword")
+    @PostMapping(path = "/changePassword")
     public void changePassword(@RequestBody ChangePassword changePassword){
         customerService.resetPassword(changePassword.getUserId(), changePassword.getOldPassword(), changePassword.getNewPassword());
     }

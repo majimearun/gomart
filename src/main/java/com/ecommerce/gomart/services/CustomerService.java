@@ -10,6 +10,7 @@ import com.ecommerce.gomart.repositories.ProductRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,12 +70,12 @@ public class CustomerService {
                 return gomartUser.get().getUserId();
             }
             else{
-                ResponseEntity.status(null).body("Incorrect Password");
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect Password");
                 return null;
             }
         }
         else{
-            ResponseEntity.status(null).body("User not found");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
             return null;
         }
     }
@@ -115,7 +116,7 @@ public class CustomerService {
             return user.get();
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
             return null;
         }
         
@@ -130,7 +131,7 @@ public class CustomerService {
     
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
             return null;
         }
         
@@ -144,7 +145,7 @@ public class CustomerService {
             return send;
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
             return null;
         }
     }
@@ -157,7 +158,7 @@ public class CustomerService {
             return send;
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
             return null;
         }
     }
@@ -171,7 +172,7 @@ public class CustomerService {
         
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
             return null;
         }
     }
@@ -189,7 +190,7 @@ public class CustomerService {
             gomartUserRepository.save(user);
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
         }
 
     }
@@ -200,7 +201,7 @@ public class CustomerService {
             gomartUserRepository.deleteById(userId);
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
         }
     }
 
@@ -228,7 +229,7 @@ public class CustomerService {
             cartRepository.deleteById(cartRepository.findByCustomerAndProduct(user, product).getEntryId());
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
         }
         
     }
@@ -264,7 +265,7 @@ public class CustomerService {
             }
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
         }
         
         
@@ -282,7 +283,7 @@ public class CustomerService {
             }
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
         }
     }
 
@@ -296,7 +297,7 @@ public class CustomerService {
             cartRepository.save(cart);
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
         }
     }
 
@@ -312,7 +313,7 @@ public class CustomerService {
             gomartUserRepository.save(user);
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
         }
     }
 
@@ -322,7 +323,7 @@ public class CustomerService {
             return user.getCustomer().getWallet().getAmount();
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
             return 0;
         }
     }
@@ -342,11 +343,12 @@ public class CustomerService {
                 return "Password Changed Successfully";
             }
             else{
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong password");
                 return "Incorrect Password";
             }
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
             return "User not logged in";
         }
     }
@@ -360,7 +362,7 @@ public class CustomerService {
             return newPassword;
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
             return "User not logged in";
         }
     }
