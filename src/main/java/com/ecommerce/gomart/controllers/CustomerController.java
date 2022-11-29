@@ -70,6 +70,11 @@ public class CustomerController {
         customerService.changeQuantityOfProductInCart(getCart.getUserId(), getCart.getProductId(), getCart.getQuantity());
     }
 
+    @PostMapping(path = "/cart")
+    public void deleteFromCart(@RequestBody GetCart getCart){
+        customerService.removeFromCart(getCart.getUserId(), getCart.getProductId());
+    }
+
     @PostMapping(path = "/cart/checkout")
     public void checkout(@RequestBody GetCart getCart){
         customerService.checkOutFromCart(getCart.getUserId());
