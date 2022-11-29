@@ -221,6 +221,14 @@ public class CustomerService {
             Optional<Cart> cart = cartRepository.findByCustomerAndProduct(user, product);
             if(cart.isPresent()){
                 Cart newCart = cart.get();
+                if(newCart.getQuantity() + quantity > product.getQuantity()){
+                    newCart.setQuantity(product.getQuantity());
+                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not enough quantity. already maximum");
+                }
+                else{
+                    newCart.setQuantity(newCart.getQuantity() + quantity);
+                    cartRepository.save(newCart);
+                }
                 newCart.setQuantity(newCart.getQuantity() + quantity);
                 cartRepository.save(newCart);
             }
