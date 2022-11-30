@@ -100,12 +100,6 @@ public class GomartUser {
         @Enumerated(EnumType.STRING)
         private Role role;
 
-        @Column(
-                name = "password_reset_token",
-                nullable = true
-        )
-        private String passwordResetToken;
-
         @Embedded
         private Customer customer;
 
