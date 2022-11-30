@@ -15,12 +15,15 @@ import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
 import com.ecommerce.gomart.Stubs.SendCart;
 import com.ecommerce.gomart.Stubs.SendOrder;
+
+import org.apache.catalina.connector.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,28 +47,34 @@ public class CustomerService {
         this.productRepository = productRepository;
     }
 
-    public void signUp(String password, String firstName, String lastName, LocalDate dob, String email, double amount, String address, String phone){
-        Wallet wallet = new Wallet().builder()
-                .amount(amount)
-                .build();
-        Customer customer = new Customer(
-                wallet
-        );
-        GomartUser gomartUser = new GomartUser().builder()
-                .password(hashPassword(password))
-                .loginStatus(false)
-                .firstName(firstName)
-                .lastName(lastName)
-                .dob(dob)
-                .email(email)
-                .phoneNumber(phone)
-                .address(address)
-                .customer(customer)
-                .admin(new Admin(false))
-                .manager(new Manager(false, null))
-                .role(Role.CUSTOMER)
-                .build();
-        gomartUserRepository.save(gomartUser);
+    public ResponseEntity<String> signUp(String password, String firstName, String lastName, LocalDate dob, String email, double amount, String address, String phone){
+        try{
+            Wallet wallet = new Wallet().builder()
+            .amount(amount)
+            .build();
+            Customer customer = new Customer(
+                    wallet
+            );
+            GomartUser gomartUser = new GomartUser().builder()
+                    .password(hashPassword(password))
+                    .loginStatus(false)
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .dob(dob)
+                    .email(email)
+                    .phoneNumber(phone)
+                    .address(address)
+                    .customer(customer)
+                    .admin(new Admin(false))
+                    .manager(new Manager(false, null))
+                    .role(Role.CUSTOMER)
+                    .build();
+            gomartUserRepository.save(gomartUser);
+            return new ResponseEntity<>("Customer created successfully", HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cold not signup: " + e.getMessage());
+        }
     }
 
     public Long login(String email, String password){
@@ -77,22 +86,23 @@ public class CustomerService {
                 return gomartUser.get().getUserId();
             }
             else{
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect Password");
-                return null;
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Password");
             }
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User does not exist");
         }
     }
 
-    public void logout(Long userId){
+    public ResponseEntity<String> logout(Long userId){
         Optional<GomartUser> gomartUser = gomartUserRepository.findById(userId);
         if(gomartUser.isPresent()){
             gomartUser.get().setLoginStatus(false);
             gomartUserRepository.save(gomartUser.get());
-            ResponseEntity.ok().body("Logged Out");
+            return new ResponseEntity<String>("Logged out successfully", HttpStatus.OK);
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not logged in with current session");
         }
     }
 
@@ -123,8 +133,7 @@ public class CustomerService {
             return user.get();
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
-            return null;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
         
     }
@@ -138,8 +147,7 @@ public class CustomerService {
     
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
-            return null;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
         
     }
@@ -152,8 +160,7 @@ public class CustomerService {
             return send;
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
-            return null;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
@@ -165,8 +172,7 @@ public class CustomerService {
             return send;
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
-            return null;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
@@ -179,12 +185,11 @@ public class CustomerService {
         
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
-            return null;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
-    public void updateUserInfo(Long userId, String firstName, String middleName, String lastName, LocalDate dob, String email, String address, String phone){
+    public ResponseEntity<String> updateUserInfo(Long userId, String firstName, String middleName, String lastName, LocalDate dob, String email, String address, String phone){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             user.setFirstName(firstName);
@@ -195,25 +200,27 @@ public class CustomerService {
             user.setAddress(address);
             user.setPhoneNumber(phone);
             gomartUserRepository.save(user);
+            return new ResponseEntity<String>("User info updated successfully", HttpStatus.OK);
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
 
     }
 
 
-    public void deleteUserInfo(Long userId){
+    public ResponseEntity<String> deleteUserInfo(Long userId){
         if(checkIfUserLoggedIn(userId)){
             gomartUserRepository.deleteById(userId);
+            return new ResponseEntity<String>("User info deleted successfully", HttpStatus.OK);
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
     
-    public void addToCart(Long userId, Long productId, Integer quantity){
+    public ResponseEntity<String> addToCart(Long userId, Long productId, Integer quantity){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             Product product = productRepository.findById(productId).get();
@@ -223,8 +230,9 @@ public class CustomerService {
                 Cart newCart = cart.get();
                 if(newCart.getQuantity() + quantity > product.getQuantity()){
                     newCart.setQuantity(product.getQuantity());
-                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not enough quantity. already maximum");
                     cartRepository.save(newCart);
+                    throw new ResponseStatusException(HttpStatus.OK, "Quantity set to max available");
+
                 }
                 else{
                     newCart.setQuantity(newCart.getQuantity() + quantity);
@@ -237,33 +245,37 @@ public class CustomerService {
                 newCart.setProduct(product);
                 if(quantity > product.getQuantity()){
                     newCart.setQuantity(product.getQuantity());
-                    ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not enough quantity. already maximum");
+                    cartRepository.save(newCart);
+                    throw new ResponseStatusException(HttpStatus.OK, "Quantity set to max available");
                 }
                 else{
                     newCart.setQuantity(quantity);
+                    cartRepository.save(newCart);
                 }
-                cartRepository.save(newCart);
+
             }
+            return new ResponseEntity<String>("Product added to cart successfully", HttpStatus.OK);
             
         }
         else{
-            ResponseEntity.status(null).body("User not logged in");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
-    public void removeFromCart(Long userId, Long productId){
+    public ResponseEntity<String> removeFromCart(Long userId, Long productId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             Product product = productRepository.findById(productId).get();
             cartRepository.deleteById(cartRepository.findByCustomerAndProduct(user, product).get().getEntryId());
+            return new ResponseEntity<String>("Product removed from cart successfully", HttpStatus.OK);
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
         
     }
 
-    public void checkOutFromCart(Long userId){
+    public ResponseEntity<String> checkOutFromCart(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             List<Cart> cartList = cartRepository.findByCustomer(user);
@@ -272,7 +284,7 @@ public class CustomerService {
                 total += (100 - cart.getProduct().getOffer())/100 * cart.getProduct().getPrice() * cart.getQuantity();
             }
             if(total > user.getCustomer().getWallet().getAmount()){
-                throw new RuntimeException("Insufficient Balance");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
             }
             else{
                 for(Cart cart: cartList){
@@ -291,32 +303,34 @@ public class CustomerService {
                 }
                 user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() - total);
                 gomartUserRepository.save(user);
+                return new ResponseEntity<String>("Order placed successfully", HttpStatus.OK);
             }
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
         
         
     }
 
-    public void topUpWallet(Long userId, double amount){
+    public ResponseEntity<String> topUpWallet(Long userId, double amount){
         if(checkIfUserLoggedIn(userId)){
             if(amount > 0){
                 GomartUser user = gomartUserRepository.findById(userId).get();
                 user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() + amount);
                 gomartUserRepository.save(user);
+                return new ResponseEntity<String>("Wallet topped up successfully", HttpStatus.OK);
             }
             else{
-                throw new RuntimeException("Invalid Amount");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Amount cannot be negative");
             }
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
-    public void changeQuantityOfProductInCart(Long userId, Long productId, Integer quantity){
+    public ResponseEntity<String> changeQuantityOfProductInCart(Long userId, Long productId, Integer quantity){
 
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -324,9 +338,10 @@ public class CustomerService {
             Cart cart = cartRepository.findByCustomerAndProduct(user, product).get();
             cart.setQuantity(quantity);
             cartRepository.save(cart);
+            return new ResponseEntity<String>("Quantity changed successfully", HttpStatus.OK);
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
@@ -335,14 +350,15 @@ public class CustomerService {
         return user.isLoginStatus();
     }
 
-    public void applyAsManager(Long userId){
+    public ResponseEntity<String> applyAsManager(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             user.getManager().setManagerApplicationStatus(ManagerStatus.Pending);
             gomartUserRepository.save(user);
+            return new ResponseEntity<String>("Application submitted successfully", HttpStatus.OK);
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
@@ -352,8 +368,7 @@ public class CustomerService {
             return user.getCustomer().getWallet().getAmount();
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
-            return 0;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
@@ -363,36 +378,20 @@ public class CustomerService {
         return hashedPassword;
     }
 
-    public String resetPassword(Long userId, String oldPassword, String newPassword){
+    public ResponseEntity<String> resetPassword(Long userId, String oldPassword, String newPassword){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             if(encoder.matches(oldPassword, user.getPassword())){
                 user.setPassword(hashPassword(newPassword));
                 gomartUserRepository.save(user);
-                return "Password Changed Successfully";
+                return new ResponseEntity<String>("Password changed successfully", HttpStatus.OK);
             }
             else{
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong password");
-                return "Incorrect Password";
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong password entered");
             }
         }
         else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
-            return "User not logged in";
-        }
-    }
-
-    public String resetPassword(Long userId){
-        if(checkIfUserLoggedIn(userId)){
-            GomartUser user = gomartUserRepository.findById(userId).get();
-            String newPassword = RandomStringUtils.randomAlphanumeric(10);
-            user.setPassword(hashPassword(newPassword));
-            gomartUserRepository.save(user);
-            return newPassword;
-        }
-        else{
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not logged in");
-            return "User not logged in";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 }

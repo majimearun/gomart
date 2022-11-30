@@ -6,8 +6,10 @@ import com.ecommerce.gomart.Order.OrderRepository;
 import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +22,7 @@ public class ManagerService {
     private final ProductRepository productRepository;
 
     @Autowired
-    ManagerService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, ProductRepository productRepository){
+    public ManagerService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, ProductRepository productRepository){
         this.orderRepository = orderRepository;
         this.gomartUserRepository = gomartUserRepository;
         this.productRepository = productRepository;
@@ -31,7 +33,7 @@ public class ManagerService {
             productRepository.save(product);
         }
         else{
-            throw new RuntimeException("User is not a manager");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Manager level access or is not logged in");
         }
     }
 
@@ -40,7 +42,7 @@ public class ManagerService {
             productRepository.save(product);
         }
         else{
-            throw new RuntimeException("User is not a manager");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Manager level access or is not logged in");
         }
     }
 
@@ -49,7 +51,7 @@ public class ManagerService {
             productRepository.deleteById(id);
         }
         else{
-            throw new RuntimeException("User is not a manager");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Manager level access or is not logged in");
         }
     }
 
@@ -60,7 +62,7 @@ public class ManagerService {
             productRepository.save(product);
         }
         else{
-            throw new RuntimeException("User is not a manager");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Manager level access or is not logged in");
         }
     }
 
@@ -69,7 +71,7 @@ public class ManagerService {
             return productRepository.findAll();
         }
         else{
-            throw new RuntimeException("User is not a manager");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Manager level access or is not logged in");
         }
     }
 

@@ -93,19 +93,6 @@ public class Product {
     @JsonIgnore
     private List<Order> orders;
 
-    public void setCarts(List<Cart> carts) {
-        this.carts.clear();
-        if (carts != null) {
-            this.carts.addAll(carts);
-        }
-    }
-
-        public void setOrders(List<Order> orders) {
-                this.orders.clear();
-                if (orders != null) {
-                this.orders.addAll(orders);
-                }
-        }
 
 
 }

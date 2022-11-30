@@ -3,6 +3,7 @@ package com.ecommerce.gomart.GomartUser.Admin;
 import com.ecommerce.gomart.GomartUser.GomartUser;
 import com.ecommerce.gomart.GomartUser.GomartUserRepository;
 import com.ecommerce.gomart.GomartUser.Manager.Manager;
+import com.ecommerce.gomart.GomartUser.Manager.ManagerService;
 import com.ecommerce.gomart.GomartUser.Manager.ManagerStatus;
 import com.ecommerce.gomart.GomartUser.Role;
 import com.ecommerce.gomart.Order.Order;
@@ -12,8 +13,10 @@ import com.ecommerce.gomart.Product.ProductRepository;
 import com.ecommerce.gomart.Stubs.SendOrder;
 import com.ecommerce.gomart.Stubs.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -22,43 +25,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class AdminService {
+public class AdminService extends ManagerService {
     private final GomartUserRepository gomartUserRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
     @Autowired
     AdminService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, ProductRepository productRepository){
+        super(gomartUserRepository, orderRepository, productRepository);
         this.orderRepository = orderRepository;
         this.gomartUserRepository = gomartUserRepository;
         this.productRepository = productRepository;
-    }
-
-    public void addProduct(Long adminId, Product product){
-        if(checkAdminStatus(adminId)){
-            productRepository.save(product);
-        }
-        else{
-            throw new RuntimeException("User is not an admin");
-        }
-    }
-
-    public void updateProduct(Long adminId, Product product){
-        if(checkAdminStatus(adminId)){
-            productRepository.save(product);
-        }
-        else{
-            throw new RuntimeException("User is not an admin");
-        }
-    }
-
-    public void deleteProduct(Long adminId, Long id){
-        if(checkAdminStatus(adminId)){
-            productRepository.deleteById(id);
-        }
-        else{
-            throw new RuntimeException("User is not an admin");
-        }
     }
 
     public void giveManagerAccess(Long adminId, Long userId){
@@ -69,7 +46,7 @@ public class AdminService {
             gomartUserRepository.save(user);
         }
         else{
-            throw new RuntimeException("User is not an admin");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
         }
     }
 
@@ -81,7 +58,7 @@ public class AdminService {
             gomartUserRepository.save(user);
         }
         else{
-            throw new RuntimeException("User is not an admin");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
         }
     }
 
@@ -93,7 +70,7 @@ public class AdminService {
             return send;
         }
         else{
-            throw new RuntimeException("User is not an admin");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
         }
         
     }
@@ -105,7 +82,7 @@ public class AdminService {
             return send;
         }
         else{
-            throw new RuntimeException("User is not an admin");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
         }
     }
 
@@ -117,7 +94,7 @@ public class AdminService {
             return send;
         }
         else{
-            throw new RuntimeException("User is not an admin");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
         }
     }
 
@@ -129,7 +106,7 @@ public class AdminService {
             return send;
         }
         else{
-            throw new RuntimeException("User is not an admin");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
         }
     }
 
@@ -141,24 +118,6 @@ public class AdminService {
         return false;
     }
 
-    public void saveImage(Long userId, Long productId, MultipartFile file) throws IOException {
-        if(checkAdminStatus(userId)){
-            Product product = productRepository.findById(productId).get();
-            product.setImage(file.getBytes());
-            productRepository.save(product);
-        }
-        else{
-            throw new RuntimeException("User is not a admin");
-        }
-    }
 
-    public List<Product> getAllProducts(Long userId){
-        if(checkAdminStatus(userId)){
-            return productRepository.findAll();
-        }
-        else{
-            throw new RuntimeException("User is not a admin");
-        }
-    }
 
 }
