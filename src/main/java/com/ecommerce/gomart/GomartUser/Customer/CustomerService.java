@@ -15,9 +15,6 @@ import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
 import com.ecommerce.gomart.Stubs.SendCart;
 import com.ecommerce.gomart.Stubs.SendOrder;
-
-import org.apache.catalina.connector.Response;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +26,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 @Service
 public class CustomerService {
@@ -119,6 +118,7 @@ public class CustomerService {
         return productRepository.findByCategory(Category.values()[category]);
     }
 
+    @Transactional
     public List<Product> getProductsByName(String name) {
         return productRepository.findByFuzzyName(name);
     }
