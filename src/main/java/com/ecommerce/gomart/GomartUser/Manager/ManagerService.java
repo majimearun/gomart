@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ManagerService {
     private final GomartUserRepository gomartUserRepository;
@@ -27,7 +29,8 @@ public class ManagerService {
         this.gomartUserRepository = gomartUserRepository;
         this.productRepository = productRepository;
     }
-
+    
+    @Transactional
     public void addProduct(Long userId, Product product){
         if(checkManagerStatus(userId)){
             productRepository.save(product);
@@ -37,6 +40,7 @@ public class ManagerService {
         }
     }
 
+    @Transactional
     public void updateProduct(Long userId, Product product){
         if(checkManagerStatus(userId)){
             productRepository.save(product);
@@ -46,6 +50,7 @@ public class ManagerService {
         }
     }
 
+    @Transactional
     public void deleteProduct(Long userId, Long id){
         if(checkManagerStatus(userId)){
             productRepository.deleteById(id);
@@ -55,6 +60,7 @@ public class ManagerService {
         }
     }
 
+    @Transactional
     public void saveImage(Long userId, Long productId, MultipartFile file) throws IOException {
         if(checkManagerStatus(userId)){
             Product product = productRepository.findById(productId).get();
@@ -65,7 +71,8 @@ public class ManagerService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Manager level access or is not logged in");
         }
     }
-
+    
+    @Transactional
     public List<Product> getAllProducts(Long userId){
         if(checkManagerStatus(userId)){
             return productRepository.findAll();

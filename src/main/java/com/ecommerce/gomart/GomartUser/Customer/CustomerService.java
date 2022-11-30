@@ -123,10 +123,12 @@ public class CustomerService {
         return productRepository.findByFuzzyName(name);
     }
 
+    @Transactional
     public List<Product> getProductsInCategoryByPriceRange(int category, double min, double max) {
         return productRepository.findByCategoryAndPriceBetween(Category.values()[category], min, max);
     }
 
+    @Transactional
     public GomartUser getUserInfo(Long userId){
         if(checkIfUserLoggedIn(userId)){
             Optional<GomartUser> user = gomartUserRepository.findById(userId);
@@ -138,6 +140,7 @@ public class CustomerService {
         
     }
 
+    @Transactional
     public List<SendCart> getCart(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -152,6 +155,7 @@ public class CustomerService {
         
     }
 
+    @Transactional
     public List<SendOrder> getOrders(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -164,6 +168,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public List<SendOrder> getOrdersByOrderDate(Long userId, LocalDate date){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -175,7 +180,8 @@ public class CustomerService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
-
+    
+    @Transactional
     public List<SendOrder> getOrdersByOrderDateRange(Long userId, LocalDate startDate, LocalDate endDate){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -189,6 +195,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public ResponseEntity<String> updateUserInfo(Long userId, String firstName, String middleName, String lastName, LocalDate dob, String email, String address, String phone){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -208,7 +215,7 @@ public class CustomerService {
 
     }
 
-
+    @Transactional
     public ResponseEntity<String> deleteUserInfo(Long userId){
         if(checkIfUserLoggedIn(userId)){
             gomartUserRepository.deleteById(userId);
@@ -219,7 +226,7 @@ public class CustomerService {
         }
     }
 
-    
+    @Transactional
     public ResponseEntity<String> addToCart(Long userId, Long productId, Integer quantity){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -262,6 +269,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public ResponseEntity<String> removeFromCart(Long userId, Long productId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -275,6 +283,7 @@ public class CustomerService {
         
     }
 
+    @Transactional
     public ResponseEntity<String> checkOutFromCart(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -313,6 +322,7 @@ public class CustomerService {
         
     }
 
+    @Transactional
     public ResponseEntity<String> topUpWallet(Long userId, double amount){
         if(checkIfUserLoggedIn(userId)){
             if(amount > 0){
@@ -330,6 +340,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public ResponseEntity<String> changeQuantityOfProductInCart(Long userId, Long productId, Integer quantity){
 
         if(checkIfUserLoggedIn(userId)){
@@ -350,6 +361,7 @@ public class CustomerService {
         return user.isLoginStatus();
     }
 
+    @Transactional
     public ResponseEntity<String> applyAsManager(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -362,6 +374,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public double getWalletBalance(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -378,6 +391,7 @@ public class CustomerService {
         return hashedPassword;
     }
 
+    @Transactional
     public ResponseEntity<String> resetPassword(Long userId, String oldPassword, String newPassword){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();

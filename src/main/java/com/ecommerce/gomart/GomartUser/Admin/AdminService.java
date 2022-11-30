@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 @Service
 public class AdminService extends ManagerService {
     private final GomartUserRepository gomartUserRepository;
@@ -37,7 +39,8 @@ public class AdminService extends ManagerService {
         this.gomartUserRepository = gomartUserRepository;
         this.productRepository = productRepository;
     }
-
+    
+    @Transactional
     public void giveManagerAccess(Long adminId, Long userId){
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -50,6 +53,7 @@ public class AdminService extends ManagerService {
         }
     }
 
+    @Transactional
     public void removeManagerAccess(Long adminId, Long userId){
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -62,6 +66,7 @@ public class AdminService extends ManagerService {
         }
     }
 
+    @Transactional
     public List<SendOrder> getOrdersOfCustomerInDateRange(Long adminId, Long userId, LocalDate startDate, LocalDate endDate){
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -75,6 +80,7 @@ public class AdminService extends ManagerService {
         
     }
 
+    @Transactional
     public List<UserInfo> getCustomers(Long adminId){
         if(checkAdminStatus(adminId)){
             List<GomartUser> users = gomartUserRepository.findByRole(Role.CUSTOMER);
@@ -86,7 +92,7 @@ public class AdminService extends ManagerService {
         }
     }
 
-
+    @Transactional
     public List<UserInfo> getManagers(Long adminId){
         if(checkAdminStatus(adminId)){
             List<GomartUser> users = gomartUserRepository.findByRole(Role.MANAGER);
@@ -98,6 +104,7 @@ public class AdminService extends ManagerService {
         }
     }
 
+    @Transactional
     public List<UserInfo> getPendingManagers(Long adminId){
         if(checkAdminStatus(adminId)){
             List<GomartUser> managers = gomartUserRepository.findByManagerIsNotNull();

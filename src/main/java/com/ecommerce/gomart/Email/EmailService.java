@@ -1,5 +1,7 @@
 package com.ecommerce.gomart.Email;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ public class EmailService {
 
     @org.springframework.beans.factory.annotation.Value("oopsecommercewebsite@gmail.com") private String sender;
 
+    @Transactional
     public ResponseEntity<String> sendSimpleMail(Email email){
         try{
             SimpleMailMessage message = new SimpleMailMessage();
