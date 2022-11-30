@@ -116,12 +116,12 @@ public class GomartUser {
         private Admin admin;
 
         // one to many relationship with cart
-        @OneToMany(mappedBy = "customer", orphanRemoval = true, cascade = CascadeType.ALL)
+        @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
         @JsonIgnore
         private List<Cart> carts;
 
         // one to many relationship with orders
-        @OneToMany(mappedBy = "customer", orphanRemoval = true, cascade = CascadeType.ALL)
+        @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
         @JsonIgnore
         private List<Order> orders;
 
