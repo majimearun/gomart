@@ -1,5 +1,7 @@
 package com.ecommerce.gomart.GomartUser.Admin;
 
+import com.ecommerce.gomart.Email.Email;
+import com.ecommerce.gomart.Email.EmailService;
 import com.ecommerce.gomart.GomartUser.GomartUser;
 import com.ecommerce.gomart.GomartUser.GomartUserRepository;
 import com.ecommerce.gomart.GomartUser.Manager.Manager;
@@ -47,6 +49,9 @@ public class AdminService extends ManagerService {
             user.setRole(Role.MANAGER);
             user.setManager(new Manager(true, ManagerStatus.Approved));
             gomartUserRepository.save(user);
+            EmailService emailService = new EmailService();
+            Email email = new Email(user.getEmail(), "Manager Access Granted", "You have been granted Manager access to Gomart. Please login to your account to continue using your Manager Account.");
+            emailService.sendSimpleMail(email);
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
@@ -60,6 +65,9 @@ public class AdminService extends ManagerService {
             user.setRole(Role.CUSTOMER);
             user.setManager(new Manager(false, null));
             gomartUserRepository.save(user);
+            EmailService emailService = new EmailService();
+            Email email = new Email(user.getEmail(), "Manager Access Revoked", "Your Manager access to Gomart has been revoked. Ypu can still use the account as a Customer.");
+            emailService.sendSimpleMail(email);
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
