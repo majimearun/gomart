@@ -247,6 +247,9 @@ public class CustomerService {
 
     @Transactional
     public ResponseEntity<String> addToCart(Long userId, Long productId, Integer quantity){
+        if(quantity <= 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity must be greater than 0");
+        }
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             Product product = productRepository.findById(productId).get();
