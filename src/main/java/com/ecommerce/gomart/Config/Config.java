@@ -18,28 +18,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.LocalDate;
 
 @Configuration
-public class ProductConfig {
+public class Config {
 @Bean
 CommandLineRunner commandLineRunner(ProductRepository productRepository, GomartUserRepository gomartUserRepository) {
         return args -> {
         
 
         Product p1 = new Product().builder()
-                .name("Apple")
-                .price(55)
-                .description("Fresh Apple")
+                .name("Namdharis' Fresh Apples")
+                .price(550)
+                .description("1 dozen apples")
                 .quantity(10)
                 .category(Category.Groceries)
-                .offer(12.6)
+                .offer(12.0)
                 .deliveryTime(1)
                 .build();
 
         productRepository.save(p1);
 
         Product p2 = new Product().builder()
-                .name("Lays Chips")
+                .name("Lays Chips: Magic Masala")
                 .price(20)
-                .description("Big packet")
+                .description("Medium sized packet of chips")
                 .quantity(200)
                 .category(Category.Food)
                 .offer(0.0)
@@ -61,9 +61,9 @@ CommandLineRunner commandLineRunner(ProductRepository productRepository, GomartU
         productRepository.save(p3);
 
         Product p4 = new Product().builder()
-                .name("Mixie")
+                .name("Prestige Induction Cooktop")
                 .price(199)
-                .description("Mixie with 3 jars")
+                .description("1 induction cooktop")
                 .quantity(10)
                 .category(Category.HomeAppliances)
                 .offer(30.0)
@@ -96,7 +96,7 @@ CommandLineRunner commandLineRunner(ProductRepository productRepository, GomartU
                 .admin(new Admin(true))
                 .manager(new Manager(true, null))
                 .phoneNumber("9999999999")
-                .address("Dummy Admin Address")
+                .address("Bangalore South")
                 .build();
 
                 gomartUserRepository.save(dummyAdmin);
