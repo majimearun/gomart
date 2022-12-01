@@ -2,6 +2,8 @@ package com.ecommerce.gomart.GomartUser.Customer;
 
 import com.ecommerce.gomart.Cart.Cart;
 import com.ecommerce.gomart.Cart.CartRepository;
+import com.ecommerce.gomart.Email.Email;
+import com.ecommerce.gomart.Email.EmailService;
 import com.ecommerce.gomart.GomartUser.Admin.Admin;
 import com.ecommerce.gomart.GomartUser.GomartUser;
 import com.ecommerce.gomart.GomartUser.GomartUserRepository;
@@ -37,13 +39,15 @@ public class CustomerService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final EmailService emailService;
 
     @Autowired
-    CustomerService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, CartRepository cartRepository, ProductRepository productRepository){
+    CustomerService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, CartRepository cartRepository, ProductRepository productRepository, EmailService emailService){
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.gomartUserRepository = gomartUserRepository;
         this.productRepository = productRepository;
+        this.emailService = emailService;
     }
 
     public ResponseEntity<String> signUp(String password, String firstName, String lastName, LocalDate dob, String email, double amount, String address, String phone){
@@ -69,7 +73,13 @@ public class CustomerService {
                     .role(Role.CUSTOMER)
                     .build();
             gomartUserRepository.save(gomartUser);
-            return new ResponseEntity<>("Customer created successfully", HttpStatus.CREATED);
+            Email email1 = new Email().builder()
+                    .to(email)
+                    .subject("Welcome to GoMart")
+                    .body("Welcome to GoMart. We are glad to have you on board. We hope you have a great experience with us. Happy Shopping!")
+                    .build();
+            emailService.sendSimpleMail(email1);
+            return new ResponseEntity<String>("Customer created successfully", HttpStatus.CREATED);
         }
         catch(Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cold not signup: " + e.getMessage());
@@ -120,13 +130,24 @@ public class CustomerService {
 
     @Transactional
     public List<Product> getProductsByName(String name) {
+        List<Product> products = productRepository.findByNameIgnoreCaseContaining(name);
+        if(products.isEmpty()){
+            return getProductsByFuzzyName(name);
+        }
+        return products;
+    }
+
+    @Transactional
+    public List<Product> getProductsByFuzzyName(String name) {
         return productRepository.findByFuzzyName(name);
     }
 
+    @Transactional
     public List<Product> getProductsInCategoryByPriceRange(int category, double min, double max) {
         return productRepository.findByCategoryAndPriceBetween(Category.values()[category], min, max);
     }
 
+    @Transactional
     public GomartUser getUserInfo(Long userId){
         if(checkIfUserLoggedIn(userId)){
             Optional<GomartUser> user = gomartUserRepository.findById(userId);
@@ -138,6 +159,7 @@ public class CustomerService {
         
     }
 
+    @Transactional
     public List<SendCart> getCart(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -152,6 +174,7 @@ public class CustomerService {
         
     }
 
+    @Transactional
     public List<SendOrder> getOrders(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -164,6 +187,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public List<SendOrder> getOrdersByOrderDate(Long userId, LocalDate date){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -175,7 +199,8 @@ public class CustomerService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
-
+    
+    @Transactional
     public List<SendOrder> getOrdersByOrderDateRange(Long userId, LocalDate startDate, LocalDate endDate){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -189,6 +214,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public ResponseEntity<String> updateUserInfo(Long userId, String firstName, String middleName, String lastName, LocalDate dob, String email, String address, String phone){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -208,7 +234,7 @@ public class CustomerService {
 
     }
 
-
+    @Transactional
     public ResponseEntity<String> deleteUserInfo(Long userId){
         if(checkIfUserLoggedIn(userId)){
             gomartUserRepository.deleteById(userId);
@@ -219,7 +245,7 @@ public class CustomerService {
         }
     }
 
-    
+    @Transactional
     public ResponseEntity<String> addToCart(Long userId, Long productId, Integer quantity){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -262,6 +288,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public ResponseEntity<String> removeFromCart(Long userId, Long productId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -275,6 +302,7 @@ public class CustomerService {
         
     }
 
+    @Transactional
     public ResponseEntity<String> checkOutFromCart(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -302,6 +330,10 @@ public class CustomerService {
                     productRepository.save(product);
                 }
                 user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() - total);
+                Long adminId = gomartUserRepository.findByRole(Role.ADMIN).get(0).getUserId();
+                GomartUser admin = gomartUserRepository.findById(adminId).get();
+                admin.getCustomer().getWallet().setAmount(admin.getCustomer().getWallet().getAmount() + total);
+                gomartUserRepository.save(admin);
                 gomartUserRepository.save(user);
                 return new ResponseEntity<String>("Order placed successfully", HttpStatus.OK);
             }
@@ -313,6 +345,7 @@ public class CustomerService {
         
     }
 
+    @Transactional
     public ResponseEntity<String> topUpWallet(Long userId, double amount){
         if(checkIfUserLoggedIn(userId)){
             if(amount > 0){
@@ -330,6 +363,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public ResponseEntity<String> changeQuantityOfProductInCart(Long userId, Long productId, Integer quantity){
 
         if(checkIfUserLoggedIn(userId)){
@@ -350,6 +384,7 @@ public class CustomerService {
         return user.isLoginStatus();
     }
 
+    @Transactional
     public ResponseEntity<String> applyAsManager(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -362,6 +397,7 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public double getWalletBalance(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -378,6 +414,7 @@ public class CustomerService {
         return hashedPassword;
     }
 
+    @Transactional
     public ResponseEntity<String> resetPassword(Long userId, String oldPassword, String newPassword){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
