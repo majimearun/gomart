@@ -315,6 +315,11 @@ public class CustomerService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
             }
             else{
+                // make a note of all product names and quantities he has bought
+                String products = "";
+                for(Cart cart: cartList){
+                    products += cart.getProduct().getName() + ": " + cart.getQuantity() + " Pieces,\n";
+                }
                 for(Cart cart: cartList){
                     Order order = new Order().builder()
                             .customer(cart.getCustomer())
@@ -335,6 +340,12 @@ public class CustomerService {
                 admin.getCustomer().getWallet().setAmount(admin.getCustomer().getWallet().getAmount() + total);
                 gomartUserRepository.save(admin);
                 gomartUserRepository.save(user);
+                // send email to user
+                Email email = new Email();
+                email.setTo(user.getEmail());
+                email.setSubject("Order placed successfully!!");
+                email.setBody("Your order has been placed successfully. You have bought the following products:\n" + products + "Total amount: " + total + "\nOn " + LocalDate.now() + ".\n" + "Thank you for shopping with us.");
+                emailService.sendSimpleMail(email);
                 return new ResponseEntity<String>("Order placed successfully", HttpStatus.OK);
             }
         }
@@ -344,6 +355,8 @@ public class CustomerService {
         
         
     }
+
+    
 
     @Transactional
     public ResponseEntity<String> topUpWallet(Long userId, double amount){
