@@ -257,7 +257,6 @@ public class CustomerService {
                 if(newCart.getQuantity() + quantity > product.getQuantity()){
                     newCart.setQuantity(product.getQuantity());
                     cartRepository.save(newCart);
-                    throw new ResponseStatusException(HttpStatus.OK, "Quantity set to max available");
 
                 }
                 else{
@@ -272,7 +271,6 @@ public class CustomerService {
                 if(quantity > product.getQuantity()){
                     newCart.setQuantity(product.getQuantity());
                     cartRepository.save(newCart);
-                    throw new ResponseStatusException(HttpStatus.OK, "Quantity set to max available");
                 }
                 else{
                     newCart.setQuantity(quantity);
