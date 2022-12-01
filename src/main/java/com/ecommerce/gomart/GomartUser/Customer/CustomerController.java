@@ -103,7 +103,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = "/login")
-    public Long login(@RequestBody Login login){
+    public LoginDetails login(@RequestBody Login login){
         return customerService.login(login.getEmail(), login.getPassword());
     }
 

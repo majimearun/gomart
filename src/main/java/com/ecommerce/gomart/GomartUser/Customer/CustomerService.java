@@ -89,13 +89,13 @@ public class CustomerService {
         }
     }
 
-    public Long login(String email, String password){
+    public LoginDetails login(String email, String password){
         Optional<GomartUser> gomartUser = gomartUserRepository.findByEmail(email);
         if(gomartUser.isPresent()){
             if(encoder.matches(password, gomartUser.get().getPassword())){
                 gomartUser.get().setLoginStatus(true);
                 gomartUserRepository.save(gomartUser.get());
-                return gomartUser.get().getUserId();
+                return new LoginDetails(gomartUser.get().getUserId(), gomartUser.get().getRole());
             }
             else{
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid Password");
