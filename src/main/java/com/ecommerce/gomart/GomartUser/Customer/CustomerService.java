@@ -130,7 +130,7 @@ public class CustomerService {
 
     @Transactional
     public List<Product> getProductsByName(String name) {
-        List<Product> products = productRepository.findByNameContaining(name);
+        List<Product> products = productRepository.findByNameIgnoreCaseContaining(name);
         if(products.isEmpty()){
             return getProductsByFuzzyName(name);
         }
