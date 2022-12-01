@@ -330,6 +330,10 @@ public class CustomerService {
                     productRepository.save(product);
                 }
                 user.getCustomer().getWallet().setAmount(user.getCustomer().getWallet().getAmount() - total);
+                Long adminId = gomartUserRepository.findByRole(Role.ADMIN).get(0).getUserId();
+                GomartUser admin = gomartUserRepository.findById(adminId).get();
+                admin.getCustomer().getWallet().setAmount(admin.getCustomer().getWallet().getAmount() + total);
+                gomartUserRepository.save(admin);
                 gomartUserRepository.save(user);
                 return new ResponseEntity<String>("Order placed successfully", HttpStatus.OK);
             }
