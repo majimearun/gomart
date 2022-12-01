@@ -344,7 +344,7 @@ public class CustomerService {
                 Email email = new Email();
                 email.setTo(user.getEmail());
                 email.setSubject("Order placed successfully!!");
-                email.setBody("Your order has been placed successfully. You have bought the following products:\n" + products + "Total amount: " + total + "\nOn " + LocalDate.now() + ".\n" + "Thank you for shopping with us.");
+                email.setBody("Your order has been placed successfully. You have bought the following products:\n" + products + "Total amount: " + total + "\non " + LocalDate.now() + ".\n" + "Thank you for shopping with us.");
                 emailService.sendSimpleMail(email);
                 return new ResponseEntity<String>("Order placed successfully", HttpStatus.OK);
             }
