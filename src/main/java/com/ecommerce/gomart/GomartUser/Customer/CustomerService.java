@@ -2,6 +2,8 @@ package com.ecommerce.gomart.GomartUser.Customer;
 
 import com.ecommerce.gomart.Cart.Cart;
 import com.ecommerce.gomart.Cart.CartRepository;
+import com.ecommerce.gomart.Email.Email;
+import com.ecommerce.gomart.Email.EmailService;
 import com.ecommerce.gomart.GomartUser.Admin.Admin;
 import com.ecommerce.gomart.GomartUser.GomartUser;
 import com.ecommerce.gomart.GomartUser.GomartUserRepository;
@@ -37,13 +39,15 @@ public class CustomerService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final EmailService emailService;
 
     @Autowired
-    CustomerService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, CartRepository cartRepository, ProductRepository productRepository){
+    CustomerService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, CartRepository cartRepository, ProductRepository productRepository, EmailService emailService){
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.gomartUserRepository = gomartUserRepository;
         this.productRepository = productRepository;
+        this.emailService = emailService;
     }
 
     public ResponseEntity<String> signUp(String password, String firstName, String lastName, LocalDate dob, String email, double amount, String address, String phone){
@@ -69,7 +73,13 @@ public class CustomerService {
                     .role(Role.CUSTOMER)
                     .build();
             gomartUserRepository.save(gomartUser);
-            return new ResponseEntity<>("Customer created successfully", HttpStatus.CREATED);
+            Email email1 = new Email().builder()
+                    .to(email)
+                    .subject("Welcome to GoMart")
+                    .body("Welcome to GoMart. We are glad to have you on board. We hope you have a great experience with us. Happy Shopping!")
+                    .build();
+            emailService.sendSimpleMail(email1);
+            return new ResponseEntity<String>("Customer created successfully", HttpStatus.CREATED);
         }
         catch(Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cold not signup: " + e.getMessage());
