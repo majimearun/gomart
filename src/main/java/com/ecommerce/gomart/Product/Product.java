@@ -72,7 +72,8 @@ public class Product {
     private Category category;
 
     @Column(
-            name = "offer"
+                name = "offer",
+                nullable = false
     )
     private Double offer;
 
