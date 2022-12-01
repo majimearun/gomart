@@ -115,15 +115,18 @@ public class CustomerService {
         }
     }
 
+    @Transactional
     public Product getProductById(Long id) {
         Optional<Product> p1 = productRepository.findById(id);
         return p1.get();
     }
 
+    @Transactional
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
+    @Transactional
     public List<Product> getProductsByCategory(int category) {
         return productRepository.findByCategory(Category.values()[category]);
     }
