@@ -17,6 +17,9 @@ import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
 import com.ecommerce.gomart.Stubs.SendCart;
 import com.ecommerce.gomart.Stubs.SendOrder;
+
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -142,7 +145,10 @@ public class CustomerService {
 
     @Transactional
     public List<Product> getProductsByFuzzyName(String name) {
-        return productRepository.findByFuzzyName(name);
+        List<Product> products = getProducts();
+        return products.stream()
+                .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
+                .collect(Collectors.toList());
     }
 
     @Transactional
