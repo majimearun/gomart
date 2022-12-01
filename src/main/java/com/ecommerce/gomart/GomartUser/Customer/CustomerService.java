@@ -214,7 +214,6 @@ public class CustomerService {
         }
     }
 
-    @Transactional
     public ResponseEntity<String> updateUserInfo(Long userId, String firstName, String middleName, String lastName, LocalDate dob, String email, String address, String phone){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -234,7 +233,6 @@ public class CustomerService {
 
     }
 
-    @Transactional
     public ResponseEntity<String> deleteUserInfo(Long userId){
         if(checkIfUserLoggedIn(userId)){
             gomartUserRepository.deleteById(userId);
@@ -245,7 +243,6 @@ public class CustomerService {
         }
     }
 
-    @Transactional
     public ResponseEntity<String> addToCart(Long userId, Long productId, Integer quantity){
         if(quantity <= 0){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity must be greater than 0");
@@ -289,7 +286,6 @@ public class CustomerService {
         }
     }
 
-    @Transactional
     public ResponseEntity<String> removeFromCart(Long userId, Long productId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -303,7 +299,6 @@ public class CustomerService {
         
     }
 
-    @Transactional
     public ResponseEntity<String> checkOutFromCart(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -358,8 +353,6 @@ public class CustomerService {
     }
 
     
-
-    @Transactional
     public ResponseEntity<String> topUpWallet(Long userId, double amount){
         if(checkIfUserLoggedIn(userId)){
             if(amount > 0){
@@ -377,7 +370,6 @@ public class CustomerService {
         }
     }
 
-    @Transactional
     public ResponseEntity<String> changeQuantityOfProductInCart(Long userId, Long productId, Integer quantity){
 
         if(checkIfUserLoggedIn(userId)){
@@ -398,7 +390,6 @@ public class CustomerService {
         return user.isLoginStatus();
     }
 
-    @Transactional
     public ResponseEntity<String> applyAsManager(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -428,7 +419,6 @@ public class CustomerService {
         return hashedPassword;
     }
 
-    @Transactional
     public ResponseEntity<String> resetPassword(Long userId, String oldPassword, String newPassword){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();

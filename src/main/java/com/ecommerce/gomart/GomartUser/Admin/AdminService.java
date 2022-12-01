@@ -40,7 +40,7 @@ public class AdminService extends ManagerService {
         this.productRepository = productRepository;
     }
     
-    @Transactional
+
     public void giveManagerAccess(Long adminId, Long userId){
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
@@ -53,7 +53,7 @@ public class AdminService extends ManagerService {
         }
     }
 
-    @Transactional
+
     public void removeManagerAccess(Long adminId, Long userId){
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();

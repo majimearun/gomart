@@ -30,7 +30,6 @@ public class ManagerService {
         this.productRepository = productRepository;
     }
     
-    @Transactional
     public void addProduct(Long userId, Product product){
         if(checkManagerStatus(userId)){
             productRepository.save(product);
@@ -40,7 +39,6 @@ public class ManagerService {
         }
     }
 
-    @Transactional
     public void updateProduct(Long userId, Product product){
         if(checkManagerStatus(userId)){
             productRepository.save(product);
@@ -50,7 +48,6 @@ public class ManagerService {
         }
     }
 
-    @Transactional
     public void deleteProduct(Long userId, Long id){
         if(checkManagerStatus(userId)){
             productRepository.deleteById(id);
@@ -60,7 +57,7 @@ public class ManagerService {
         }
     }
 
-    @Transactional
+
     public void saveImage(Long userId, Long productId, MultipartFile file) throws IOException {
         if(checkManagerStatus(userId)){
             Product product = productRepository.findById(productId).get();
