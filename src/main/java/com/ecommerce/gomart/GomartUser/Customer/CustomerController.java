@@ -40,6 +40,7 @@ public class CustomerController {
         return customerService.getProductsByName(name);
     }
 
+
     @PostMapping(path = "products/category/priceRange")
     public @ResponseBody Iterable<Product> getProductsInCategoryByPriceRange( @RequestBody GetProduct getProduct){
 

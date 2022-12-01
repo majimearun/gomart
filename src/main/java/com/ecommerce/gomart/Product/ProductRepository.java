@@ -15,6 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByFuzzyName(String name);
 
     List<Product> findByCategoryAndPriceBetween(Category category, double min, double max);
+
+    List<Product> findByNameContaining(String name);
     
 
 }

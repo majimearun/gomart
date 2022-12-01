@@ -86,12 +86,12 @@ CommandLineRunner commandLineRunner(ProductRepository productRepository, GomartU
         
         final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         GomartUser dummyAdmin = new GomartUser().builder()
-                .firstName("Dummy")
-                .lastName("Admin")
-                .email("dummyAdmin@gmail.com")
+                .firstName("Arunachala")
+                .lastName("A M")
+                .email("arunachala0619@gmail.com")
                 .password(encoder.encode("admin"))
                 .role(Role.ADMIN)
-                .dob(LocalDate.of(2000, 1, 1))
+                .dob(LocalDate.of(2003, 6, 24))
                 .customer(new Customer(new Wallet(0)))
                 .admin(new Admin(true))
                 .manager(new Manager(true, null))
