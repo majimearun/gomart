@@ -24,65 +24,65 @@ CommandLineRunner commandLineRunner(ProductRepository productRepository, GomartU
         return args -> {
         
 
-        Product p1 = new Product().builder()
-                .name("Namdharis' Fresh Apples")
-                .price(550)
-                .description("1 dozen apples")
-                .quantity(10)
-                .category(Category.Groceries)
-                .offer(12.0)
-                .deliveryTime(1)
-                .build();
+        // Product p1 = new Product().builder()
+        //         .name("Namdharis' Fresh Apples")
+        //         .price(550)
+        //         .description("1 dozen apples")
+        //         .quantity(10)
+        //         .category(Category.Groceries)
+        //         .offer(12.0)
+        //         .deliveryTime(1)
+        //         .build();
 
-        productRepository.save(p1);
+        // productRepository.save(p1);
 
-        Product p2 = new Product().builder()
-                .name("Lays Chips: Magic Masala")
-                .price(20)
-                .description("Medium sized packet of chips")
-                .quantity(200)
-                .category(Category.Food)
-                .offer(0.0)
-                .deliveryTime(1)
-                .build();
+        // Product p2 = new Product().builder()
+        //         .name("Lays Chips: Magic Masala")
+        //         .price(20)
+        //         .description("Medium sized packet of chips")
+        //         .quantity(200)
+        //         .category(Category.Food)
+        //         .offer(0.0)
+        //         .deliveryTime(1)
+        //         .build();
 
-        productRepository.save(p2);
+        // productRepository.save(p2);
 
-        Product p3 = new Product().builder()
-                .name("Nataraj Pencil Box")
-                .price(100)
-                .description("20 pencils")
-                .quantity(100)
-                .category(Category.Stationery)
-                .offer(10.0)
-                .deliveryTime(1)
-                .build();
+        // Product p3 = new Product().builder()
+        //         .name("Nataraj Pencil Box")
+        //         .price(100)
+        //         .description("20 pencils")
+        //         .quantity(100)
+        //         .category(Category.Stationery)
+        //         .offer(10.0)
+        //         .deliveryTime(1)
+        //         .build();
 
-        productRepository.save(p3);
+        // productRepository.save(p3);
 
-        Product p4 = new Product().builder()
-                .name("Prestige Induction Cooktop")
-                .price(199)
-                .description("1 induction cooktop")
-                .quantity(10)
-                .category(Category.HomeAppliances)
-                .offer(30.0)
-                .deliveryTime(1)
-                .build();   
+        // Product p4 = new Product().builder()
+        //         .name("Prestige Induction Cooktop")
+        //         .price(199)
+        //         .description("1 induction cooktop")
+        //         .quantity(10)
+        //         .category(Category.HomeAppliances)
+        //         .offer(30.0)
+        //         .deliveryTime(1)
+        //         .build();   
 
-        productRepository.save(p4);
+        // productRepository.save(p4);
 
-        Product p5 = new Product().builder()
-                        .name("Sri Sri Toothpaste")
-                        .price(10)
-                        .description("Fresh ayuevedic toothpaste")
-                        .quantity(150)
-                        .category(Category.Misc)
-                        .offer(0.0)
-                        .deliveryTime(1)
-                        .build();
+        // Product p5 = new Product().builder()
+        //                 .name("Sri Sri Toothpaste")
+        //                 .price(10)
+        //                 .description("Fresh ayuevedic toothpaste")
+        //                 .quantity(150)
+        //                 .category(Category.Misc)
+        //                 .offer(0.0)
+        //                 .deliveryTime(1)
+        //                 .build();
 
-        productRepository.save(p5);
+        // productRepository.save(p5);
         
         final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         GomartUser dummyAdmin = new GomartUser().builder()
