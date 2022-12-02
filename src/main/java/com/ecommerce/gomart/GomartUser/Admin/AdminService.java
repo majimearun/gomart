@@ -33,13 +33,15 @@ public class AdminService extends ManagerService {
     private final GomartUserRepository gomartUserRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final EmailService emailService;
 
     @Autowired
-    AdminService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, ProductRepository productRepository){
+    AdminService(GomartUserRepository gomartUserRepository, OrderRepository orderRepository, ProductRepository productRepository, EmailService emailService){
         super(gomartUserRepository, orderRepository, productRepository);
         this.orderRepository = orderRepository;
         this.gomartUserRepository = gomartUserRepository;
         this.productRepository = productRepository;
+        this.emailService = emailService;
     }
     
 
@@ -49,7 +51,6 @@ public class AdminService extends ManagerService {
             user.setRole(Role.MANAGER);
             user.setManager(new Manager(true, ManagerStatus.Approved));
             gomartUserRepository.save(user);
-            EmailService emailService = new EmailService();
             Email email = new Email(user.getEmail(), "Manager Access Granted", "You have been granted Manager access to Gomart. Please login to your account to continue using your Manager Account.");
             emailService.sendSimpleMail(email);
         }
@@ -65,7 +66,6 @@ public class AdminService extends ManagerService {
             user.setRole(Role.CUSTOMER);
             user.setManager(new Manager(false, null));
             gomartUserRepository.save(user);
-            EmailService emailService = new EmailService();
             Email email = new Email(user.getEmail(), "Manager Access Revoked", "Your Manager access to Gomart has been revoked. Ypu can still use the account as a Customer.");
             emailService.sendSimpleMail(email);
         }
