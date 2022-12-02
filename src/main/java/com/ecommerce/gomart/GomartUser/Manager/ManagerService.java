@@ -33,7 +33,7 @@ public class ManagerService {
     public Long addProduct(Long userId, Product product){
         if(checkManagerStatus(userId)){
             productRepository.save(product);
-            Long productId = productRepository.findProductByProductName(product.getName()).getProductId();
+            Long productId = productRepository.findByName(product.getName()).getProductId();
             return productId;
         }
         else{
@@ -44,7 +44,7 @@ public class ManagerService {
     public Long updateProduct(Long userId, Product product){
         if(checkManagerStatus(userId)){
             productRepository.save(product);
-            Long productId = productRepository.findProductByProductName(product.getName()).getProductId();
+            Long productId = productRepository.findByName(product.getName()).getProductId();
             return productId;
         }
         else{
