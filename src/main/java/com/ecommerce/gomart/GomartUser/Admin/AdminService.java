@@ -66,7 +66,7 @@ public class AdminService extends ManagerService {
             user.setRole(Role.CUSTOMER);
             user.setManager(new Manager(false, null));
             gomartUserRepository.save(user);
-            Email email = new Email(user.getEmail(), "Manager Access Revoked", "Your Manager access to Gomart has been revoked. Ypu can still use the account as a Customer.");
+            Email email = new Email(user.getEmail(), "Manager Access Revoked", "Your Manager access to Gomart has been revoked. You can still use the account as a Customer.");
             emailService.sendSimpleMail(email);
         }
         else{
