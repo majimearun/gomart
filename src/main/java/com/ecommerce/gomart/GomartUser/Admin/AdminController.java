@@ -55,13 +55,13 @@ public class AdminController {
     }
     
     @PostMapping(path = "/addProduct")
-    public void addProduct(@RequestBody GetInfo getInfo){
-        adminService.addProduct(getInfo.getSenderId(),getInfo.getProduct());
+    public Long addProduct(@RequestBody GetInfo getInfo){
+        return adminService.addProduct(getInfo.getSenderId(),getInfo.getProduct());
     }
 
     @PostMapping(path = "/updateProduct")
-    public void updateProduct(@RequestBody GetInfo getInfo){
-        adminService.updateProduct(getInfo.getSenderId(),getInfo.getProduct());
+    public Long updateProduct(@RequestBody GetInfo getInfo){
+        return adminService.updateProduct(getInfo.getSenderId(),getInfo.getProduct());
     }
 
     @PostMapping(path = "/deleteProduct")
