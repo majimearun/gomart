@@ -147,7 +147,7 @@ public class CustomerService {
     public List<Product> getProductsByFuzzyName(String name) {
         List<Product> products = getProducts();
         List<Product> filtered = products.stream()
-                .filter(product -> FuzzySearch.ratio(product.getName(), name) > 30)
+                .filter(product -> FuzzySearch.weightedRatio(product.getName(), name) > 50)
                 .collect(Collectors.toList());
         List<Product> fProducts = filtered.stream()
                 .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
