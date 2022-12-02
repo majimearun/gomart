@@ -30,18 +30,22 @@ public class ManagerService {
         this.productRepository = productRepository;
     }
     
-    public void addProduct(Long userId, Product product){
+    public Long addProduct(Long userId, Product product){
         if(checkManagerStatus(userId)){
             productRepository.save(product);
+            Long productId = productRepository.findProductByProductName(product.getName()).getProductId();
+            return productId;
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Manager level access or is not logged in");
         }
     }
 
-    public void updateProduct(Long userId, Product product){
+    public Long updateProduct(Long userId, Product product){
         if(checkManagerStatus(userId)){
             productRepository.save(product);
+            Long productId = productRepository.findProductByProductName(product.getName()).getProductId();
+            return productId;
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Manager level access or is not logged in");

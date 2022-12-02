@@ -20,13 +20,13 @@ public class ManagerController {
     }
 
     @PostMapping(path = "/addProduct")
-    public void addProduct(@RequestBody GetInfo getInfo){
-        managerService.addProduct(getInfo.getSenderId(),getInfo.getProduct());
+    public Long addProduct(@RequestBody GetInfo getInfo){
+        return managerService.addProduct(getInfo.getSenderId(),getInfo.getProduct());
     }
 
     @PostMapping(path = "/updateProduct")
-    public void updateProduct(@RequestBody GetInfo getInfo){
-        managerService.updateProduct(getInfo.getSenderId(),getInfo.getProduct());
+    public Long updateProduct(@RequestBody GetInfo getInfo){
+        return managerService.updateProduct(getInfo.getSenderId(),getInfo.getProduct());
     }
 
     @PostMapping(path = "/deleteProduct")
