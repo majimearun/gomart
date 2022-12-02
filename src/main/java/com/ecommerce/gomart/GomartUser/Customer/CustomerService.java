@@ -146,9 +146,10 @@ public class CustomerService {
     @Transactional
     public List<Product> getProductsByFuzzyName(String name) {
         List<Product> products = getProducts();
-        return products.stream()
+        List<Product> fProducts = products.stream()
                 .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
                 .collect(Collectors.toList());
+        return fProducts.subList(0, Math.min(5, fProducts.size()));
     }
 
     @Transactional
