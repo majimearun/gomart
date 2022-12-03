@@ -12,6 +12,7 @@ import com.ecommerce.gomart.Order.Order;
 import com.ecommerce.gomart.Order.OrderRepository;
 import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
+import com.ecommerce.gomart.Stubs.SendCart;
 import com.ecommerce.gomart.Stubs.SendOrder;
 import com.ecommerce.gomart.Stubs.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +124,19 @@ public class AdminService extends ManagerService {
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
         }
+    }
+
+    @Transactional
+    public List<SendCart> getItemsSoldOnADate(Long adminId, LocalDate date){
+        if(checkAdminStatus(adminId)){
+            List<Order> orders = orderRepository.findByOrderDate(date);
+            List<SendCart> send = orders.stream().map(order -> new SendCart(order.getProduct(), order.getQuantity())).collect(Collectors.toList());
+            return send;
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
+        }
+
     }
 
     private boolean checkAdminStatus(Long userId){

@@ -318,6 +318,13 @@ public class CustomerService {
             GomartUser user = gomartUserRepository.findById(userId).get();
             List<Cart> cartList = cartRepository.findByCustomer(user);
             double total = 0;
+            int sentQuantity = 0;
+            for(Cart cart : cartList){
+                sentQuantity += cart.getQuantity();
+            }
+            if(sentQuantity==0){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart is empty");
+            }
             for(Cart cart: cartList){
                 total += (100 - cart.getProduct().getOffer())/100 * cart.getProduct().getPrice() * cart.getQuantity();
             }

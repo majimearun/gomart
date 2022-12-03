@@ -3,6 +3,7 @@ package com.ecommerce.gomart.GomartUser.Admin;
 import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Stubs.GetInfo;
 import com.ecommerce.gomart.Stubs.GetOrder;
+import com.ecommerce.gomart.Stubs.SendCart;
 import com.ecommerce.gomart.Stubs.SendOrder;
 import com.ecommerce.gomart.Stubs.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,11 @@ public class AdminController {
     @PostMapping(path = "/saveImage")
     public void saveImage(@RequestParam("file") MultipartFile file, @RequestParam("productId") Long productId, @RequestParam("userId") Long userId) throws IOException {
         adminService.saveImage(userId, productId, file);
+    }
+
+    @PostMapping(path="/report/date")
+    public List<SendCart> generateReportByDate(@RequestBody GetOrder getOrder){
+        return adminService.getItemsSoldOnADate(getOrder.getSenderId(), getOrder.getStartDate());
     }
 
 }
