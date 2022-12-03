@@ -53,7 +53,7 @@ public class CustomerController {
     }
 
     @PostMapping(path = "update")
-    public void updateUserInfo(@PathVariable Long userId, @RequestBody UserInfo userInfo){
+    public void updateUserInfo(@RequestBody UserInfo userInfo){
         customerService.updateUserInfo(userInfo.getUserId(), userInfo.getFirstName(), userInfo.getMiddleName(), userInfo.getLastName(),  userInfo.getDob(),userInfo.getEmail(), userInfo.getAddress(), userInfo.getPhone());
     }
 
