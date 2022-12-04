@@ -1,6 +1,5 @@
 package com.ecommerce.gomart.Order;
 
-
 import com.ecommerce.gomart.GomartUser.GomartUser;
 import com.ecommerce.gomart.Product.Product;
 import lombok.AllArgsConstructor;
@@ -51,6 +50,22 @@ public class Order {
             name = "order_date"
     )
     private LocalDate orderDate;
+
+    @Column(
+        name = "product_name_snapshot"
+    )
+        private String productNameSnapshot;
+
+        @Column(
+                name = "product_price_snapshot"
+        )
+        private Double productPriceSnapshot;
+
+        @Column(
+                name = "product_offer_snapshot"
+        )
+        private Double productOfferSnapshot;
+
 
     @ManyToOne
     @JoinColumn(
