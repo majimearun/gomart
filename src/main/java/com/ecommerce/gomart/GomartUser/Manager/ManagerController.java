@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://gomart.vercel.app/")
 @RequestMapping(path = "/manager")
 public class ManagerController {
     private final ManagerService managerService;

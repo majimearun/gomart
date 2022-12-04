@@ -339,8 +339,14 @@ public class CustomerService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart is empty");
             }
             for(Cart cart: cartList){
-                total += (100 - cart.getProduct().getOffer())/100 * cart.getProduct().getPrice() * cart.getQuantity();
-            }
+                if(cart.getProduct().getQuantity() < cart.getQuantity()){
+                    continue;
+                }
+                else{
+                    total += (100 - cart.getProduct().getOffer())/100 * cart.getProduct().getPrice() * cart.getQuantity();
+                }
+
+                }
             if(total > user.getCustomer().getWallet().getAmount()){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient balance");
             }

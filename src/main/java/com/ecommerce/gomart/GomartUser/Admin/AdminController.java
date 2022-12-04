@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://gomart.vercel.app/")
 @RequestMapping(path = "/admin")
 public class AdminController {
 
