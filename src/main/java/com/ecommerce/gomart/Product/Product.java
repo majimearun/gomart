@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+@Embeddable
 @Entity
 @Table(
         name = "gomart_products"

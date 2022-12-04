@@ -192,7 +192,7 @@ public class CustomerService {
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             List<Order> orders = orderRepository.findByCustomer(user);
-            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),makeSnapshotProduct(order.getProduct(), order), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
+            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
             return send;
         }
         else{
@@ -200,19 +200,6 @@ public class CustomerService {
         }
     }
 
-    private Product makeSnapshotProduct(Product product, Order order){
-        Product snapshotProduct = new Product();
-        snapshotProduct.setProductId(product.getProductId());
-        snapshotProduct.setName(order.getProductNameSnapshot());
-        snapshotProduct.setCategory(product.getCategory());
-        snapshotProduct.setPrice(order.getProductPriceSnapshot());
-        snapshotProduct.setQuantity(product.getQuantity());
-        snapshotProduct.setOffer(order.getProductOfferSnapshot());
-        snapshotProduct.setDeliveryTime(product.getDeliveryTime());
-        snapshotProduct.setImage(product.getImage());
-        return snapshotProduct;
-
-    }
 
     @Transactional
     public List<SendOrder> getOrdersByOrderDate(Long userId, LocalDate date){
@@ -370,9 +357,6 @@ public class CustomerService {
                             .product(cart.getProduct())
                             .quantity(cart.getQuantity())
                             .orderDate(LocalDate.now())
-                            .productNameSnapshot(cart.getProduct().getName())
-                            .productPriceSnapshot(cart.getProduct().getPrice())
-                            .productOfferSnapshot(cart.getProduct().getOffer())
                             .build();
                     orderRepository.save(order);
                     cartRepository.deleteById(cart.getEntryId());
