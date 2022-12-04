@@ -209,6 +209,7 @@ public class CustomerService {
         snapshotProduct.setQuantity(product.getQuantity());
         snapshotProduct.setOffer(order.getProductOfferSnapshot());
         snapshotProduct.setDeliveryTime(product.getDeliveryTime());
+        snapshotProduct.setImage(product.getImage());
         return snapshotProduct;
 
     }
