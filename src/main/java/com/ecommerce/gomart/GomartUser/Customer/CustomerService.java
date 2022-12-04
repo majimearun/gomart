@@ -341,7 +341,7 @@ public class CustomerService {
             }
             for(Cart cart: cartList){
                 if(cart.getProduct().getQuantity() < cart.getQuantity()){
-                    continue;
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product " + cart.getProduct().getName() + " is out of stock");
                 }
                 else{
                     total += (100 - cart.getProduct().getOffer())/100 * cart.getProduct().getPrice() * cart.getQuantity();
