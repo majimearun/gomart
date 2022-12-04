@@ -341,6 +341,13 @@ public class CustomerService {
             }
             for(Cart cart: cartList){
                 if(cart.getProduct().getQuantity() < cart.getQuantity()){
+                    if(cart.getProduct().getQuantity() == 0){
+                        cartRepository.deleteById(cart.getEntryId());
+                    }
+                    else{
+                        cart.setQuantity(cart.getProduct().getQuantity());
+                        cartRepository.save(cart);
+                    }
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product " + cart.getProduct().getName() + " is out of stock");
                 }
                 else{
