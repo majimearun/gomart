@@ -7,6 +7,7 @@ import javax.persistence.Lob;
 import com.ecommerce.gomart.Product.Category;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Builder
 public class ProductSnapshot{
     @Column(
             name = "product_name",

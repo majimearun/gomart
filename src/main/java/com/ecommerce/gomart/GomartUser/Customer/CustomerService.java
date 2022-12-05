@@ -193,7 +193,15 @@ public class CustomerService {
     public List<SendOrder> getOrders(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
-            List<Order> orders = orderRepository.findByCustomer(user);
+            CustomerSnapshot customerSnapshot = new CustomerSnapshot().builder()
+                    .userId(user.getUserId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .build(); 
+            List<Order> orders = orderRepository.findByCustomer(customerSnapshot);
             List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
             return send;
         }
@@ -207,7 +215,15 @@ public class CustomerService {
     public List<SendOrder> getOrdersByOrderDate(Long userId, LocalDate date){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
-            List<Order> orders = orderRepository.findByCustomerAndOrderDate(user, date);
+            CustomerSnapshot customerSnapshot = new CustomerSnapshot().builder()
+                    .userId(user.getUserId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .build(); 
+            List<Order> orders = orderRepository.findByCustomerAndOrderDate(customerSnapshot, date);
             List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
             return send;
         }
@@ -220,7 +236,15 @@ public class CustomerService {
     public List<SendOrder> getOrdersByOrderDateRange(Long userId, LocalDate startDate, LocalDate endDate){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
-            List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
+            CustomerSnapshot customerSnapshot = new CustomerSnapshot().builder()
+                    .userId(user.getUserId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .build(); 
+            List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(customerSnapshot, startDate, endDate);
             List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
             return send;
         
