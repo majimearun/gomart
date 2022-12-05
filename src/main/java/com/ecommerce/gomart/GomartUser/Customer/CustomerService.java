@@ -10,8 +10,10 @@ import com.ecommerce.gomart.GomartUser.GomartUserRepository;
 import com.ecommerce.gomart.GomartUser.Manager.Manager;
 import com.ecommerce.gomart.GomartUser.Manager.ManagerStatus;
 import com.ecommerce.gomart.GomartUser.Role;
+import com.ecommerce.gomart.Order.CustomerSnapshot;
 import com.ecommerce.gomart.Order.Order;
 import com.ecommerce.gomart.Order.OrderRepository;
+import com.ecommerce.gomart.Order.ProductSnapshot;
 import com.ecommerce.gomart.Product.Category;
 import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
@@ -192,7 +194,7 @@ public class CustomerService {
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             List<Order> orders = orderRepository.findByCustomer(user);
-            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),makeSnapshotProduct(order.getProduct(), order), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
+            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
             return send;
         }
         else{
@@ -200,19 +202,6 @@ public class CustomerService {
         }
     }
 
-    private Product makeSnapshotProduct(Product product, Order order){
-        Product snapshotProduct = new Product();
-        snapshotProduct.setProductId(product.getProductId());
-        snapshotProduct.setName(order.getProductNameSnapshot());
-        snapshotProduct.setCategory(product.getCategory());
-        snapshotProduct.setPrice(order.getProductPriceSnapshot());
-        snapshotProduct.setQuantity(product.getQuantity());
-        snapshotProduct.setOffer(order.getProductOfferSnapshot());
-        snapshotProduct.setDeliveryTime(product.getDeliveryTime());
-        snapshotProduct.setImage(product.getImage());
-        return snapshotProduct;
-
-    }
 
     @Transactional
     public List<SendOrder> getOrdersByOrderDate(Long userId, LocalDate date){
@@ -366,14 +355,24 @@ public class CustomerService {
                 }
                 for(Cart cart: cartList){
                     Order order = new Order().builder()
-                            .customer(cart.getCustomer())
-                            .product(cart.getProduct())
                             .quantity(cart.getQuantity())
                             .orderDate(LocalDate.now())
-                            .productNameSnapshot(cart.getProduct().getName())
-                            .productPriceSnapshot(cart.getProduct().getPrice())
-                            .productOfferSnapshot(cart.getProduct().getOffer())
                             .build();
+                    CustomerSnapshot customerSnapshot = new CustomerSnapshot();
+                    ProductSnapshot productSnapshot = new ProductSnapshot();
+                    customerSnapshot.setAddress(user.getAddress());
+                    customerSnapshot.setEmail(user.getEmail());
+                    customerSnapshot.setPhoneNumber(user.getPhoneNumber());
+                    customerSnapshot.setFirstName(user.getFirstName());
+                    customerSnapshot.setLastName(user.getLastName());
+                    customerSnapshot.setUserId(user.getUserId());
+                    order.setCustomer(customerSnapshot);
+                    productSnapshot.setName(cart.getProduct().getName());
+                    productSnapshot.setPrice(cart.getProduct().getPrice());
+                    productSnapshot.setOffer(cart.getProduct().getOffer());
+                    productSnapshot.setImage(cart.getProduct().getImage());
+                    productSnapshot.setDeliveryTime(cart.getProduct().getDeliveryTime());
+                    order.setProduct(productSnapshot);
                     orderRepository.save(order);
                     cartRepository.deleteById(cart.getEntryId());
                     // decrease quantity of product

@@ -10,6 +10,7 @@ import com.ecommerce.gomart.GomartUser.Manager.ManagerStatus;
 import com.ecommerce.gomart.GomartUser.Role;
 import com.ecommerce.gomart.Order.Order;
 import com.ecommerce.gomart.Order.OrderRepository;
+import com.ecommerce.gomart.Order.ProductSnapshot;
 import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
 import com.ecommerce.gomart.Stubs.SendCart;
@@ -80,7 +81,7 @@ public class AdminService extends ManagerService {
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
             List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
-            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(), makeSnapshotProduct(order.getProduct(), order), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
+            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(), order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
             return send;
         }
         else{
@@ -130,7 +131,7 @@ public class AdminService extends ManagerService {
     public List<SendCart> getItemsSoldOnADate(Long adminId, LocalDate date){
         if(checkAdminStatus(adminId)){
             List<Order> orders = orderRepository.findByOrderDate(date);
-            List<SendCart> send = orders.stream().map(order -> new SendCart(makeSnapshotProduct(order.getProduct(), order), order.getQuantity())).collect(Collectors.toList());
+            List<SendCart> send = orders.stream().map(order -> new SendCart(snapshotToProduct(order.getProduct()), order.getQuantity())).collect(Collectors.toList());
             return send;
         }
         else{
@@ -138,17 +139,16 @@ public class AdminService extends ManagerService {
         }
 
     }
-    private Product makeSnapshotProduct(Product product, Order order){
-        Product snapshotProduct = new Product();
-        snapshotProduct.setProductId(product.getProductId());
-        snapshotProduct.setName(order.getProductNameSnapshot());
-        snapshotProduct.setCategory(product.getCategory());
-        snapshotProduct.setPrice(order.getProductPriceSnapshot());
-        snapshotProduct.setQuantity(product.getQuantity());
-        snapshotProduct.setOffer(order.getProductOfferSnapshot());
-        snapshotProduct.setDeliveryTime(product.getDeliveryTime());
-        snapshotProduct.setImage(product.getImage());
-        return snapshotProduct;
+
+    private Product snapshotToProduct(ProductSnapshot productSnapshot){
+        Product product = new Product();
+        product.setName(productSnapshot.getName());
+        product.setPrice(productSnapshot.getPrice());
+        product.setOffer(productSnapshot.getOffer());
+        product.setImage(productSnapshot.getImage());
+        product.setDeliveryTime(productSnapshot.getDeliveryTime());
+        return product;
+        
 
     }
 

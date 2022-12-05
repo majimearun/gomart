@@ -1,5 +1,6 @@
 package com.ecommerce.gomart.Stubs;
 
+import com.ecommerce.gomart.Order.ProductSnapshot;
 import com.ecommerce.gomart.Product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 public class SendOrder {
     private Long transactionId;
-    private Product product;
+    private ProductSnapshot product;
     private int quantity;
     private LocalDate orderDate;
     
