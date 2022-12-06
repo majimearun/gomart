@@ -140,18 +140,19 @@ public class CustomerService {
     public List<Product> getProductsByName(String name) {
         List<Product> products = productRepository.findByNameIgnoreCaseContaining(name);
         if(products.isEmpty()){
-            List<Product> fuzzyName = getProductsByFuzzyName(name);
-            if(fuzzyName.isEmpty()){
-                List<Product> productsByDescription = getProductsByDescription(name);
-                if(productsByDescription.isEmpty()){
+            List<Product> productsByDescription = getProductsByDescription(name);
+            
+            if(productsByDescription.isEmpty()){
+                    List<Product> fuzzyName = getProductsByFuzzyName(name);
+                if(fuzzyName.isEmpty()){
                     return getProductsByFuzzyDescription(name);
                 }
                 else{
-                    return productsByDescription;
+                    return fuzzyName;
                 }
             }
             else{
-                return fuzzyName;
+                return productsByDescription;
             }
         }
         else{
