@@ -151,10 +151,16 @@ public class CustomerService {
         List<Product> filtered = products.stream()
                 .filter(product -> FuzzySearch.weightedRatio(product.getName(), name) > 50)
                 .collect(Collectors.toList());
-        List<Product> filteredByDescription = products.stream()
+        List<Product> byDescription = productRepository.findByDescriptionIgnoreCaseContaining(name);
+        if(byDescription.isEmpty()){
+            List<Product> filteredByDescription = products.stream()
                 .filter(product -> FuzzySearch.weightedRatio(product.getDescription(), name) > 50)
                 .collect(Collectors.toList());
-        filtered.addAll(filteredByDescription);
+                filtered.addAll(filteredByDescription);
+        }
+        else{
+            filtered.addAll(byDescription);
+        }
         List<Product> fProducts = filtered.stream()
                 .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
                 .collect(Collectors.toList());
