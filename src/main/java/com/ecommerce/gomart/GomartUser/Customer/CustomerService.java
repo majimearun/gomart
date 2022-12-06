@@ -140,9 +140,23 @@ public class CustomerService {
     public List<Product> getProductsByName(String name) {
         List<Product> products = productRepository.findByNameIgnoreCaseContaining(name);
         if(products.isEmpty()){
-            return getProductsByFuzzyName(name);
+            List<Product> fuzzyName = getProductsByFuzzyName(name);
+            if(fuzzyName.isEmpty()){
+                List<Product> productsByDescription = getProductsByDescription(name);
+                if(productsByDescription.isEmpty()){
+                    return getProductsByFuzzyDescription(name);
+                }
+                else{
+                    return productsByDescription;
+                }
+            }
+            else{
+                return fuzzyName;
+            }
         }
-        return products;
+        else{
+            return products;
+        }
     }
 
     @Transactional
@@ -151,20 +165,29 @@ public class CustomerService {
         List<Product> filtered = products.stream()
                 .filter(product -> FuzzySearch.weightedRatio(product.getName(), name) > 50)
                 .collect(Collectors.toList());
-        List<Product> byDescription = productRepository.findByDescriptionIgnoreCaseContaining(name);
-        if(byDescription.isEmpty()){
-            List<Product> filteredByDescription = products.stream()
+        List<Product> fProducts = filtered.stream()
+                .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
+                .collect(Collectors.toList());
+        return fProducts.subList(0, Math.min(5, fProducts.size()));
+    }
+
+    @Transactional
+    private List<Product> getProductsByDescription(String name) {
+        List<Product> products = productRepository.findByDescriptionIgnoreCaseContaining(name);
+        if(products.isEmpty()){
+            return getProductsByFuzzyDescription(name);
+        }
+        return products;
+    }
+
+    @Transactional 
+    private List<Product> getProductsByFuzzyDescription(String name) {
+        List<Product> products = getProducts();
+        List<Product> filtered = products.stream()
                 .filter(product -> FuzzySearch.weightedRatio(product.getDescription(), name) > 50)
                 .collect(Collectors.toList());
-                filtered.addAll(filteredByDescription);
-        }
-        else{
-            filtered.addAll(byDescription);
-        }
-        // remove dulicates
-        List<Product> filteredFinal = filtered.stream().distinct().collect(Collectors.toList());
-        List<Product> fProducts = filteredFinal.stream()
-                .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
+        List<Product> fProducts = filtered.stream()
+                .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getDescription(), name) - FuzzySearch.weightedRatio(p1.getDescription(), name))
                 .collect(Collectors.toList());
         return fProducts.subList(0, Math.min(5, fProducts.size()));
     }
