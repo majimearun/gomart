@@ -150,6 +150,22 @@ public class AdminService extends ManagerService {
 
     }
 
+    @Transactional
+    public void deleteUser(Long adminId, Long userId){
+        if(checkAdminStatus(adminId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            if(user.getRole() == Role.ADMIN){
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot delete an Admin");
+            }
+            else{
+                gomartUserRepository.delete(user);
+            }
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
+        }
+    }
+
     private Product snapshotToProduct(ProductSnapshot productSnapshot){
         Product product = new Product();
         product.setName(productSnapshot.getName());

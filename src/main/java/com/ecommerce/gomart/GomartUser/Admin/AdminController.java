@@ -81,4 +81,9 @@ public class AdminController {
         return adminService.getItemsSoldOnADate(getOrder.getSenderId(), getOrder.getStartDate());
     }
 
+    @PostMapping(path="/delete/user")
+    public void deleteUser(@RequestBody GetInfo getInfo){
+        adminService.deleteUser(getInfo.getSenderId(), getInfo.getUserId());
+    }
+
 }
