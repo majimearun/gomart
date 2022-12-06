@@ -159,6 +159,8 @@ public class AdminService extends ManagerService {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot delete an Admin");
             }
             else{
+                Email email = new Email(user.getEmail(), "Account Deleted", "Your account has been deletedby the Admin. Please contact the Admin for more information.");
+                emailService.sendSimpleMail(email);
                 gomartUserRepository.delete(user);
             }
         }

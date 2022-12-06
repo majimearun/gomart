@@ -146,7 +146,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public List<Product> getProductsByFuzzyName(String name) {
+    private List<Product> getProductsByFuzzyName(String name) {
         List<Product> products = getProducts();
         List<Product> filtered = products.stream()
                 .filter(product -> FuzzySearch.weightedRatio(product.getName(), name) > 50)
@@ -277,8 +277,14 @@ public class CustomerService {
 
     public ResponseEntity<String> deleteUserInfo(Long userId){
         if(checkIfUserLoggedIn(userId)){
+            Email email = new Email();
+            email.setTo(gomartUserRepository.findById(userId).get().getEmail());
+            email.setSubject("Account Deletion");
+            email.setBody("Your GoMart account has been deleted successfully. We're sorry to see you go.");
+            emailService.sendSimpleMail(email);
             gomartUserRepository.deleteById(userId);
             return new ResponseEntity<String>("User info deleted successfully", HttpStatus.OK);
+
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
