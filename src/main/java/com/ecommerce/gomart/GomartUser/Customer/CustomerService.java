@@ -225,7 +225,8 @@ public class CustomerService {
                     .build(); 
             List<Order> orders = orderRepository.findByCustomerAndOrderDate(customerSnapshot, date);
             List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
-            return send;
+            //  reverse the list to get the latest order first
+            return send.stream().sorted((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate())).collect(Collectors.toList());
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
@@ -246,7 +247,8 @@ public class CustomerService {
                     .build(); 
             List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(customerSnapshot, startDate, endDate);
             List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
-            return send;
+            // reverse the list so that the most recent order is at the top
+            return send.stream().sorted((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate())).collect(Collectors.toList());
         
         }
         else{
