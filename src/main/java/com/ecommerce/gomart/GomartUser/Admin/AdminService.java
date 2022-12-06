@@ -103,6 +103,7 @@ public class AdminService extends ManagerService {
     public List<UserInfo> getCustomers(Long adminId){
         if(checkAdminStatus(adminId)){
             List<GomartUser> users = gomartUserRepository.findAll();
+            users.removeIf(user -> user.getRole() == Role.ADMIN);
             List<UserInfo> send = users.stream().map(user -> new UserInfo(user.getUserId(), user.getFirstName(), user.getMiddleName(), user.getLastName(), user.getEmail(), user.getDob(), user.getAddress(), user.getPhoneNumber())).collect(Collectors.toList());
             return send;
         }
