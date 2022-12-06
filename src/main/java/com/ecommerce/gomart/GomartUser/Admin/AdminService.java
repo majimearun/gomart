@@ -25,7 +25,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -142,8 +145,21 @@ public class AdminService extends ManagerService {
     public List<SendCart> getItemsSoldOnADate(Long adminId, LocalDate date){
         if(checkAdminStatus(adminId)){
             List<Order> orders = orderRepository.findByOrderDate(date);
-            List<SendCart> send = orders.stream().map(order -> new SendCart(snapshotToProduct(order.getProduct()), order.getQuantity())).collect(Collectors.toList());
+            Map<ProductSnapshot, Integer> productToQuantity = new HashMap<>();
+            for(Order order : orders){
+                if(productToQuantity.containsKey(order.getProduct())){
+                    productToQuantity.put(order.getProduct(), productToQuantity.get(order.getProduct()) + order.getQuantity());
+                }
+                else{
+                    productToQuantity.put(order.getProduct(), order.getQuantity());
+                }
+            }
+            List<SendCart> send = new ArrayList<>();
+            for(Map.Entry<ProductSnapshot, Integer> entry : productToQuantity.entrySet()){
+                send.add(new SendCart(snapshotToProduct(entry.getKey()), entry.getValue()));
+            }
             return send;
+
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");

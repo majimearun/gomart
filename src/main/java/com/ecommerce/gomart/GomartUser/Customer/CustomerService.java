@@ -140,7 +140,7 @@ public class CustomerService {
     public List<Product> getProductsByName(String name) {
         List<Product> products = productRepository.findByNameIgnoreCaseContaining(name);
         if(products.isEmpty()){
-            List<Product> productsByDescription = getProductsByDescription(name);
+            List<Product> productsByDescription = productRepository.findByDescriptionIgnoreCaseContaining(name);
             
             if(productsByDescription.isEmpty()){
                     List<Product> fuzzyName = getProductsByFuzzyName(name);
@@ -170,15 +170,6 @@ public class CustomerService {
                 .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
                 .collect(Collectors.toList());
         return fProducts.subList(0, Math.min(5, fProducts.size()));
-    }
-
-    @Transactional
-    private List<Product> getProductsByDescription(String name) {
-        List<Product> products = productRepository.findByDescriptionIgnoreCaseContaining(name);
-        if(products.isEmpty()){
-            return getProductsByFuzzyDescription(name);
-        }
-        return products;
     }
 
     @Transactional 
@@ -239,7 +230,7 @@ public class CustomerService {
                     .build(); 
             List<Order> orders = orderRepository.findByCustomer(customerSnapshot);
             List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
-            return send;
+            return send.stream().sorted((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate())).collect(Collectors.toList());
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
