@@ -161,6 +161,8 @@ public class CustomerService {
         else{
             filtered.addAll(byDescription);
         }
+        // remove dulicates
+        return filtered.stream().distinct().collect(Collectors.toList());
         List<Product> fProducts = filtered.stream()
                 .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
                 .collect(Collectors.toList());
