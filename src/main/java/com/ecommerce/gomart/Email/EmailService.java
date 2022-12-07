@@ -18,7 +18,7 @@ public class EmailService {
     private JavaMailSender javaMailSender;
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    @org.springframework.beans.factory.annotation.Value("oopsecommercewebsite@gmail.com") private String sender;
+    @org.springframework.beans.factory.annotation.Value("gomart.ecommerce@gmail.com") private String sender;
 
     @Transactional
     public ResponseEntity<String> sendSimpleMail(Email email){

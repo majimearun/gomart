@@ -326,7 +326,6 @@ public class CustomerService {
         
     }
 
-    @Transactional
     public ResponseEntity<String> checkOutFromCart(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
