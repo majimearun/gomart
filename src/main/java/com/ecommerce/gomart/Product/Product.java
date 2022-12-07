@@ -89,11 +89,4 @@ public class Product {
     @JsonIgnore
     private List<Cart> carts;
 
-    // one to many relationship with orders
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Order> orders;
-
-
-
 }

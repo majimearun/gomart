@@ -10,11 +10,11 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    List<Order> findByCustomer(GomartUser user);
+    List<Order> findByCustomer(CustomerSnapshot customer);
 
-    List<Order> findByCustomerAndOrderDate(GomartUser user, LocalDate date);
+    List<Order> findByCustomerAndOrderDate(CustomerSnapshot customer, LocalDate date);
 
-    List<Order> findByCustomerAndOrderDateBetween(GomartUser user, LocalDate startDate, LocalDate endDate);
+    List<Order> findByCustomerAndOrderDateBetween(CustomerSnapshot customer, LocalDate startDate, LocalDate endDate);
 
     List<Order> findByOrderDate(LocalDate date);
 

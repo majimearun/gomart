@@ -8,8 +8,10 @@ import com.ecommerce.gomart.GomartUser.Manager.Manager;
 import com.ecommerce.gomart.GomartUser.Manager.ManagerService;
 import com.ecommerce.gomart.GomartUser.Manager.ManagerStatus;
 import com.ecommerce.gomart.GomartUser.Role;
+import com.ecommerce.gomart.Order.CustomerSnapshot;
 import com.ecommerce.gomart.Order.Order;
 import com.ecommerce.gomart.Order.OrderRepository;
+import com.ecommerce.gomart.Order.ProductSnapshot;
 import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
 import com.ecommerce.gomart.Stubs.SendCart;
@@ -23,7 +25,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -79,9 +84,18 @@ public class AdminService extends ManagerService {
     public List<SendOrder> getOrdersOfCustomerInDateRange(Long adminId, Long userId, LocalDate startDate, LocalDate endDate){
         if(checkAdminStatus(adminId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
-            List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
-            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(), makeSnapshotProduct(order.getProduct(), order), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
-            return send;
+            CustomerSnapshot customerSnapshot = new CustomerSnapshot().builder()
+                    .userId(user.getUserId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .build(); 
+            List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(customerSnapshot, startDate, endDate);
+            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(), order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
+            // reverse the list so that the most recent order is at the top
+            return send.stream().sorted((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate())).collect(Collectors.toList());
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
@@ -93,6 +107,7 @@ public class AdminService extends ManagerService {
     public List<UserInfo> getCustomers(Long adminId){
         if(checkAdminStatus(adminId)){
             List<GomartUser> users = gomartUserRepository.findAll();
+            users.removeIf(user -> user.getRole() == Role.ADMIN);
             List<UserInfo> send = users.stream().map(user -> new UserInfo(user.getUserId(), user.getFirstName(), user.getMiddleName(), user.getLastName(), user.getEmail(), user.getDob(), user.getAddress(), user.getPhoneNumber())).collect(Collectors.toList());
             return send;
         }
@@ -130,25 +145,55 @@ public class AdminService extends ManagerService {
     public List<SendCart> getItemsSoldOnADate(Long adminId, LocalDate date){
         if(checkAdminStatus(adminId)){
             List<Order> orders = orderRepository.findByOrderDate(date);
-            List<SendCart> send = orders.stream().map(order -> new SendCart(makeSnapshotProduct(order.getProduct(), order), order.getQuantity())).collect(Collectors.toList());
+            Map<ProductSnapshot, Integer> productToQuantity = new HashMap<>();
+            for(Order order : orders){
+                if(productToQuantity.containsKey(order.getProduct())){
+                    productToQuantity.put(order.getProduct(), productToQuantity.get(order.getProduct()) + order.getQuantity());
+                }
+                else{
+                    productToQuantity.put(order.getProduct(), order.getQuantity());
+                }
+            }
+            List<SendCart> send = new ArrayList<>();
+            for(Map.Entry<ProductSnapshot, Integer> entry : productToQuantity.entrySet()){
+                send.add(new SendCart(snapshotToProduct(entry.getKey()), entry.getValue()));
+            }
             return send;
+
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
         }
 
     }
-    private Product makeSnapshotProduct(Product product, Order order){
-        Product snapshotProduct = new Product();
-        snapshotProduct.setProductId(product.getProductId());
-        snapshotProduct.setName(order.getProductNameSnapshot());
-        snapshotProduct.setCategory(product.getCategory());
-        snapshotProduct.setPrice(order.getProductPriceSnapshot());
-        snapshotProduct.setQuantity(product.getQuantity());
-        snapshotProduct.setOffer(order.getProductOfferSnapshot());
-        snapshotProduct.setDeliveryTime(product.getDeliveryTime());
-        snapshotProduct.setImage(product.getImage());
-        return snapshotProduct;
+
+    @Transactional
+    public void deleteUser(Long adminId, Long userId){
+        if(checkAdminStatus(adminId)){
+            GomartUser user = gomartUserRepository.findById(userId).get();
+            if(user.getRole() == Role.ADMIN){
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Cannot delete an Admin");
+            }
+            else{
+                Email email = new Email(user.getEmail(), "Account Deleted", "Your account has been deletedby the Admin. Please contact the Admin for more information.");
+                emailService.sendSimpleMail(email);
+                gomartUserRepository.delete(user);
+            }
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have Admin level access or is not logged in");
+        }
+    }
+
+    private Product snapshotToProduct(ProductSnapshot productSnapshot){
+        Product product = new Product();
+        product.setName(productSnapshot.getName());
+        product.setPrice(productSnapshot.getPrice());
+        product.setOffer(productSnapshot.getOffer());
+        product.setImage(productSnapshot.getImage());
+        product.setDeliveryTime(productSnapshot.getDeliveryTime());
+        return product;
+        
 
     }
 

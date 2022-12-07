@@ -32,14 +32,6 @@ public class Order {
     )
     private Long orderTransactionId;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "product_id",
-            nullable = false
-    )
-    private Product product;
-
-
     @Column(
             name = "quantity",
             nullable = false
@@ -51,26 +43,13 @@ public class Order {
     )
     private LocalDate orderDate;
 
-    @Column(
-        name = "product_name_snapshot"
-    )
-        private String productNameSnapshot;
 
-        @Column(
-                name = "product_price_snapshot"
-        )
-        private Double productPriceSnapshot;
+        @Embedded
+        private CustomerSnapshot customer;
 
-        @Column(
-                name = "product_offer_snapshot"
-        )
-        private Double productOfferSnapshot;
+        @Embedded
+        private ProductSnapshot product;
 
 
-    @ManyToOne
-    @JoinColumn(
-            name = "user_id"
-    )
-    private GomartUser customer;
 
 }

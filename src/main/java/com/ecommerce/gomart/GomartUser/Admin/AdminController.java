@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://gomart.vercel.app/")
+// @CrossOrigin(origins = "https://gomart.vercel.app/")
+@CrossOrigin
 @RequestMapping(path = "/admin")
 public class AdminController {
 
@@ -78,6 +79,11 @@ public class AdminController {
     @PostMapping(path="/report/date")
     public List<SendCart> generateReportByDate(@RequestBody GetOrder getOrder){
         return adminService.getItemsSoldOnADate(getOrder.getSenderId(), getOrder.getStartDate());
+    }
+
+    @PostMapping(path="/delete/user")
+    public void deleteUser(@RequestBody GetInfo getInfo){
+        adminService.deleteUser(getInfo.getSenderId(), getInfo.getUserId());
     }
 
 }

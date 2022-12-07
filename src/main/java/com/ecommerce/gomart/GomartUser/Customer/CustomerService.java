@@ -10,8 +10,10 @@ import com.ecommerce.gomart.GomartUser.GomartUserRepository;
 import com.ecommerce.gomart.GomartUser.Manager.Manager;
 import com.ecommerce.gomart.GomartUser.Manager.ManagerStatus;
 import com.ecommerce.gomart.GomartUser.Role;
+import com.ecommerce.gomart.Order.CustomerSnapshot;
 import com.ecommerce.gomart.Order.Order;
 import com.ecommerce.gomart.Order.OrderRepository;
+import com.ecommerce.gomart.Order.ProductSnapshot;
 import com.ecommerce.gomart.Product.Category;
 import com.ecommerce.gomart.Product.Product;
 import com.ecommerce.gomart.Product.ProductRepository;
@@ -138,19 +140,46 @@ public class CustomerService {
     public List<Product> getProductsByName(String name) {
         List<Product> products = productRepository.findByNameIgnoreCaseContaining(name);
         if(products.isEmpty()){
-            return getProductsByFuzzyName(name);
+            List<Product> productsByDescription = productRepository.findByDescriptionIgnoreCaseContaining(name);
+            
+            if(productsByDescription.isEmpty()){
+                    List<Product> fuzzyName = getProductsByFuzzyName(name);
+                if(fuzzyName.isEmpty()){
+                    return getProductsByFuzzyDescription(name);
+                }
+                else{
+                    return fuzzyName;
+                }
+            }
+            else{
+                return productsByDescription;
+            }
         }
-        return products;
+        else{
+            return products;
+        }
     }
 
     @Transactional
-    public List<Product> getProductsByFuzzyName(String name) {
+    private List<Product> getProductsByFuzzyName(String name) {
         List<Product> products = getProducts();
         List<Product> filtered = products.stream()
                 .filter(product -> FuzzySearch.weightedRatio(product.getName(), name) > 50)
                 .collect(Collectors.toList());
         List<Product> fProducts = filtered.stream()
                 .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getName(), name) - FuzzySearch.weightedRatio(p1.getName(), name))
+                .collect(Collectors.toList());
+        return fProducts.subList(0, Math.min(5, fProducts.size()));
+    }
+
+    @Transactional 
+    private List<Product> getProductsByFuzzyDescription(String name) {
+        List<Product> products = getProducts();
+        List<Product> filtered = products.stream()
+                .filter(product -> FuzzySearch.weightedRatio(product.getDescription(), name) > 50)
+                .collect(Collectors.toList());
+        List<Product> fProducts = filtered.stream()
+                .sorted((p1, p2) -> FuzzySearch.weightedRatio(p2.getDescription(), name) - FuzzySearch.weightedRatio(p1.getDescription(), name))
                 .collect(Collectors.toList());
         return fProducts.subList(0, Math.min(5, fProducts.size()));
     }
@@ -191,36 +220,40 @@ public class CustomerService {
     public List<SendOrder> getOrders(Long userId){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
-            List<Order> orders = orderRepository.findByCustomer(user);
-            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),makeSnapshotProduct(order.getProduct(), order), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
-            return send;
+            CustomerSnapshot customerSnapshot = new CustomerSnapshot().builder()
+                    .userId(user.getUserId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .build(); 
+            List<Order> orders = orderRepository.findByCustomer(customerSnapshot);
+            List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
+            return send.stream().sorted((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate())).collect(Collectors.toList());
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
         }
     }
 
-    private Product makeSnapshotProduct(Product product, Order order){
-        Product snapshotProduct = new Product();
-        snapshotProduct.setProductId(product.getProductId());
-        snapshotProduct.setName(order.getProductNameSnapshot());
-        snapshotProduct.setCategory(product.getCategory());
-        snapshotProduct.setPrice(order.getProductPriceSnapshot());
-        snapshotProduct.setQuantity(product.getQuantity());
-        snapshotProduct.setOffer(order.getProductOfferSnapshot());
-        snapshotProduct.setDeliveryTime(product.getDeliveryTime());
-        snapshotProduct.setImage(product.getImage());
-        return snapshotProduct;
-
-    }
 
     @Transactional
     public List<SendOrder> getOrdersByOrderDate(Long userId, LocalDate date){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
-            List<Order> orders = orderRepository.findByCustomerAndOrderDate(user, date);
+            CustomerSnapshot customerSnapshot = new CustomerSnapshot().builder()
+                    .userId(user.getUserId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .build(); 
+            List<Order> orders = orderRepository.findByCustomerAndOrderDate(customerSnapshot, date);
             List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
-            return send;
+            //  reverse the list to get the latest order first
+            return send.stream().sorted((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate())).collect(Collectors.toList());
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
@@ -231,9 +264,18 @@ public class CustomerService {
     public List<SendOrder> getOrdersByOrderDateRange(Long userId, LocalDate startDate, LocalDate endDate){
         if(checkIfUserLoggedIn(userId)){
             GomartUser user = gomartUserRepository.findById(userId).get();
-            List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(user, startDate, endDate);
+            CustomerSnapshot customerSnapshot = new CustomerSnapshot().builder()
+                    .userId(user.getUserId())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .email(user.getEmail())
+                    .phoneNumber(user.getPhoneNumber())
+                    .address(user.getAddress())
+                    .build(); 
+            List<Order> orders = orderRepository.findByCustomerAndOrderDateBetween(customerSnapshot, startDate, endDate);
             List<SendOrder> send = orders.stream().map(order -> new SendOrder(order.getOrderTransactionId(),order.getProduct(), order.getQuantity(), order.getOrderDate())).collect(Collectors.toList());
-            return send;
+            // reverse the list so that the most recent order is at the top
+            return send.stream().sorted((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate())).collect(Collectors.toList());
         
         }
         else{
@@ -262,8 +304,14 @@ public class CustomerService {
 
     public ResponseEntity<String> deleteUserInfo(Long userId){
         if(checkIfUserLoggedIn(userId)){
+            Email email = new Email();
+            email.setTo(gomartUserRepository.findById(userId).get().getEmail());
+            email.setSubject("Account Deletion");
+            email.setBody("Your GoMart account has been deleted successfully. We're sorry to see you go.");
+            emailService.sendSimpleMail(email);
             gomartUserRepository.deleteById(userId);
             return new ResponseEntity<String>("User info deleted successfully", HttpStatus.OK);
+
         }
         else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not logged in");
@@ -365,14 +413,24 @@ public class CustomerService {
                 }
                 for(Cart cart: cartList){
                     Order order = new Order().builder()
-                            .customer(cart.getCustomer())
-                            .product(cart.getProduct())
                             .quantity(cart.getQuantity())
                             .orderDate(LocalDate.now())
-                            .productNameSnapshot(cart.getProduct().getName())
-                            .productPriceSnapshot(cart.getProduct().getPrice())
-                            .productOfferSnapshot(cart.getProduct().getOffer())
                             .build();
+                    CustomerSnapshot customerSnapshot = new CustomerSnapshot();
+                    ProductSnapshot productSnapshot = new ProductSnapshot();
+                    customerSnapshot.setAddress(user.getAddress());
+                    customerSnapshot.setEmail(user.getEmail());
+                    customerSnapshot.setPhoneNumber(user.getPhoneNumber());
+                    customerSnapshot.setFirstName(user.getFirstName());
+                    customerSnapshot.setLastName(user.getLastName());
+                    customerSnapshot.setUserId(user.getUserId());
+                    order.setCustomer(customerSnapshot);
+                    productSnapshot.setName(cart.getProduct().getName());
+                    productSnapshot.setPrice(cart.getProduct().getPrice());
+                    productSnapshot.setOffer(cart.getProduct().getOffer());
+                    productSnapshot.setImage(cart.getProduct().getImage());
+                    productSnapshot.setDeliveryTime(cart.getProduct().getDeliveryTime());
+                    order.setProduct(productSnapshot);
                     orderRepository.save(order);
                     cartRepository.deleteById(cart.getEntryId());
                     // decrease quantity of product

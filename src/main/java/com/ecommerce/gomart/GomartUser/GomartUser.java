@@ -114,10 +114,6 @@ public class GomartUser {
         @JsonIgnore
         private List<Cart> carts;
 
-        // one to many relationship with orders
-        @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-        @JsonIgnore
-        private List<Order> orders;
 
 
 }

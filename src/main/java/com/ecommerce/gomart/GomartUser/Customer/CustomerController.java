@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://gomart.vercel.app/")
+// @CrossOrigin(origins = "https://gomart.vercel.app/")
+@CrossOrigin
 @RequestMapping(path = "/user")
 public class CustomerController {
 
